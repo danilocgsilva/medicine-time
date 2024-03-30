@@ -1,0 +1,15 @@
+{
+    "name": "danilocgsilva/medicine_time",
+    "autoload": {
+        "psr-4": {
+            "Danilocgsilva\\MedicineTime\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Danilo Silva",
+            "email": "contact@danilocgsilva.me"
+        }
+    ],
+    "require": {}
+}
