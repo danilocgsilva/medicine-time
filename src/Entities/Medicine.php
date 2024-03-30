@@ -6,7 +6,7 @@ namespace Danilocgsilva\MedicineTime\Entities;
 
 class Medicine
 {
-    public const TABLE_NAME = "Medicine";
+    public const TABLE_NAME = "medicines";
     
     /** @var string $name */
     private string $name;

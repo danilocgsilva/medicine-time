@@ -2,7 +2,8 @@
     "name": "danilocgsilva/medicine_time",
     "autoload": {
         "psr-4": {
-            "Danilocgsilva\\MedicineTime\\": "src/"
+            "Danilocgsilva\\MedicineTime\\": "src/",
+            "Danilocgsilva\\MedicineTime\\Migrations\\": "migrations/"
         }
     },
     "authors": [

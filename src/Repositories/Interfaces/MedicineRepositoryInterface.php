@@ -15,5 +15,5 @@ interface MedicineRepositoryInterface
      */
     public function list(): array;
 
-    public function save(Medicine $medicine): self;
+    public function save(Medicine $medicine): void;
 }
