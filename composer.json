@@ -3,7 +3,8 @@
     "autoload": {
         "psr-4": {
             "Danilocgsilva\\MedicineTime\\": "src/",
-            "Danilocgsilva\\MedicineTime\\Migrations\\": "migrations/"
+            "Danilocgsilva\\MedicineTime\\Migrations\\": "migrations/",
+            "Danilocgsilva\\MedicineTime\\Tests\\": "tests/"
         }
     },
     "authors": [

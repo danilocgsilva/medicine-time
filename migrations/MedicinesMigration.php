@@ -6,8 +6,9 @@ namespace Danilocgsilva\MedicineTime\Migrations;
 
 use Danilocgsilva\MedicineTime\Entities\Medicine;
 
-class MedicinesMigration
+class MedicinesMigration implements MigrationInterface
 {
+    /** @inheritDoc */
     public function getUpString(): string
     {
         $upString = <<<EOT
@@ -21,6 +22,7 @@ EOT;
         return sprintf($upString, Medicine::TABLE_NAME);
     }
 
+    /** @inheritDoc */
     public function getDownString(): string
     {
         $downString = 'DROP TABLE IF EXISTS %s;';

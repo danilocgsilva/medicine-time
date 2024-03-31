@@ -8,19 +8,12 @@ use Danilocgsilva\MedicineTime\Repositories\Interfaces\MedicineRepositoryInterfa
 use PDO;
 use Danilocgsilva\MedicineTime\Entities\Medicine;
 
-class MedicinesRepository implements MedicineRepositoryInterface
+class MedicinesRepository extends AbstractRepository implements MedicineRepositoryInterface
 {
-    private PDO $pdo;
-    
-    public function __construct(PDO $pdo)
-    {
-        $this->pdo = $pdo;
-    }
-    
     /** @inheritdoc */
     public function list(): array
     {
-        $query = "SELECT name FROM " . Medicine::TABLE_NAME . ";";
+        $query = "SELECT id, name FROM " . Medicine::TABLE_NAME . ";";
         $preResult = $this->pdo->prepare($query);
         $preResult->execute();
         $preResult->setFetchMode(PDO::FETCH_CLASS, Medicine::class);
@@ -33,10 +26,11 @@ class MedicinesRepository implements MedicineRepositoryInterface
         return $list;
     }
 
+    /** @inheritDoc */
     public function save(Medicine $medicine): void
     {
         $insertQuery = 'INSERT INTO ' . Medicine::TABLE_NAME . ' (name) VALUES (:name);';
         $preResult = $this->pdo->prepare($insertQuery);
-        $preResult->execute([':name' => $medicine->getName()]);
+        $preResult->execute([':name' => $medicine->name]);
     }
 }

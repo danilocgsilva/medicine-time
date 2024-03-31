@@ -2,22 +2,22 @@
 
 declare(strict_types= 1);
 
-use PHPUnit\Framework\TestCase;
+namespace Danilocgsilva\MedicineTime\Tests\Repositories;
+
 use Danilocgsilva\MedicineTime\Repositories\MedicinesRepository;
-use Danilocgsilva\MedicineTime\Entities\Medicine;
-use PDO;
 use Danilocgsilva\MedicineTime\Migrations\MedicinesMigration;
+use Danilocgsilva\MedicineTime\Tests\Commons\TestCaseDB;
+use Danilocgsilva\MedicineTime\Tests\Commons\MedicineTrait;
 
-class MedicineRepositoryTest extends TestCase
+class MedicineRepositoryTest extends TestCaseDB
 {
-    private MedicinesRepository $medicinesRepository;
+    use MedicineTrait;
 
-    private PDO $pdo;
+    private MedicinesRepository $medicinesRepository;
 
     public function setUp(): void
     {
-        $dsn = sprintf('mysql:host=%s;dbname=%s', getenv('MEDICINE_TIME_DB_HOST'), getenv('MEDICINE_TIME_DB_NAME'));
-        $this->pdo = new PDO($dsn, getenv('MEDICINE_TIME_DB_USERNAME'), getenv('MEDICINE_TIME_DB_PASSWORD'));
+        parent::setUp();
         
         $this->medicinesRepository = new MedicinesRepository($this->pdo);
     }
@@ -31,22 +31,5 @@ class MedicineRepositoryTest extends TestCase
         $listing = $this->medicinesRepository->list();
 
         $this->assertCount(1, $listing);
-    }
-
-    private function createTestingMedicine(string $medicineName): Medicine
-    {
-        $medicine = new Medicine();
-        $medicine->setName($medicineName);
-        return $medicine;
-    }
-
-    private function renewByMigration($entityMigration): void
-    {
-        $renewQuery = sprintf("USE %s;", getenv('MEDICINE_TIME_DB_NAME'));
-        $renewQuery .= $entityMigration->getDownString();
-        $renewQuery .= $entityMigration->getUpString();
-
-        $preResult = $this->pdo->prepare($renewQuery);
-        $preResult->execute();
     }
 }
