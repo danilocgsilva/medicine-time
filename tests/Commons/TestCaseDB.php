@@ -27,8 +27,10 @@ class TestCaseDB extends TestCase
     protected function renewByMigration(MigrationInterface $entityMigration): void
     {
         $renewQuery = sprintf("USE %s;", getenv('MEDICINE_TIME_DB_NAME'));
-        $renewQuery .= $entityMigration->getDownString();
-        $renewQuery .= $entityMigration->getUpString();
+        $renewQuery .= "\n" . "SET FOREIGN_KEY_CHECKS=0;";
+        $renewQuery .= "\n" . $entityMigration->getDownString();
+        $renewQuery .= "\n" . $entityMigration->getUpString();
+        $renewQuery .= "\n" . "SET FOREIGN_KEY_CHECKS=1;";
 
         $preResult = $this->pdo->prepare($renewQuery);
         $preResult->execute();

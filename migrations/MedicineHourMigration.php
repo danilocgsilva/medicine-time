@@ -16,21 +16,22 @@ class MedicineHourMigration implements MigrationInterface
 CREATE TABLE `%s` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `hour` TIME NOT NULL,
-    `medicine_id` INT UNISGNED NOT NULL,
-    PRIMARY KEY (`key`)
+    `medicine_id` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
-ALTER TABLE `%s` ADD CONSTRAINT `medicine_medicine_time` FOREIGN KEY (`medicine_id`) REFERENCES `%s` (`id`);
+ALTER TABLE `%s` ADD CONSTRAINT `medicine_medicine_hour` FOREIGN KEY (`medicine_id`) REFERENCES `%s` (`id`);
 EOT;
-
-        return sprintf($upString, MedicineHour::TABLE_NAME, MedicineHour::TABLE_NAME, Medicine::TABLE_NAME);
+        $migrationString = sprintf($upString, MedicineHour::TABLE_NAME, MedicineHour::TABLE_NAME, Medicine::TABLE_NAME);
+        return $migrationString;
     }
 
     /** @inheritDoc */
     public function getDownString(): string
     {
-        $downString = "DROP TABLE IF EXISTS `%s`;";
-        return sprintf($downString, MedicineHour::TABLE_NAME);
+        $downString = "ALTER TABLE `%s` DROP FOREIGN KEY `medicine_medicine_hour`;";
+        $downString .= "\n" . "DROP TABLE IF EXISTS `%s`;";
+        return sprintf($downString, MedicineHour::TABLE_NAME, MedicineHour::TABLE_NAME);
     }
 }
 

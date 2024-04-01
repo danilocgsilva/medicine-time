@@ -38,4 +38,9 @@ class Medicine
     {
         return $this;
     }
+
+    public function getManagementHours()
+    {
+
+    }
 }

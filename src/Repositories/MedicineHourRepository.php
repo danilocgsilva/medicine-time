@@ -13,9 +13,10 @@ class MedicineHourRepository extends AbstractRepository implements MedicineHourI
     /** @inheritDoc */
     public function addManagementHour(int $hour, Medicine $medicine): self
     {
+        $stringHour = $hour . ":00:00";
         $inserQuery = "INSERT INTO %s (hour, medicine_id) VALUES (:hour, :medicine_id);";
         $preResults = $this->pdo->prepare(sprintf($inserQuery, MedicineHour::TABLE_NAME));
-        $preResults->execute([ ':hour' => $hour, ':medicine_id' => $medicine->id ]);
+        $preResults->execute([ ':hour' => $stringHour, ':medicine_id' => $medicine->id ]);
         return $this;
     }
 }
