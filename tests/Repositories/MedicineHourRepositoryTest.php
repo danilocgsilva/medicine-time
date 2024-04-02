@@ -26,7 +26,7 @@ class MedicineHourRepositoryTest extends TestCaseDB
         $this->medicinesRepository = new MedicinesRepository($this->pdo);
     }
     
-    public function testSave(): void
+    public function testSaveAndGet(): void
     {
         $this->renewByMigration(new MedicinesMigration());
         $this->renewByMigration(new MedicineHourMigration());
@@ -34,12 +34,12 @@ class MedicineHourRepositoryTest extends TestCaseDB
         $medicine = $this->createTestingMedicine("Alopurinol 40mg");
         $medicine->setId(5);
         $this->medicinesRepository->save($medicine);
-        $this->medicineHourRepository->addManagementHour(9, $medicine);
-
-        $justSavedMedicine = $this->medicinesRepository->list()[0];
+        
+        $this->medicineHourRepository->addManagementHour(11, $medicine);
+        
         $this->assertSame(
-            "09:00:00",
-            $justSavedMedicine->getManagementHours()[0]
+            "11:00:00",
+            $this->medicineHourRepository->getMenagementHour()
         );
     }
 }

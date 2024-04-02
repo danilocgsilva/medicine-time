@@ -19,4 +19,10 @@ class MedicineHourRepository extends AbstractRepository implements MedicineHourI
         $preResults->execute([ ':hour' => $stringHour, ':medicine_id' => $medicine->id ]);
         return $this;
     }
+
+    public function getMenagementHour(Medicine $medicine): string
+    {
+        $query = "SELECT ";
+        return "";
+    }
 }

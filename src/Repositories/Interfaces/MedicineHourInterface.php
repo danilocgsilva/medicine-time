@@ -15,4 +15,12 @@ interface MedicineHourInterface
      * @return self
      */
     public function addManagementHour(int $hour, Medicine $medicine): self;
+
+    /**
+     * Fetches the medicine managemente hour.
+     *
+     * @param Medicine $medicine
+     * @return string
+     */
+    public function getMenagementHour(Medicine $medicine): string;
 }
