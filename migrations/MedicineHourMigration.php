@@ -29,9 +29,16 @@ EOT;
     /** @inheritDoc */
     public function getDownString(): string
     {
+        $finalDownString = "";
         $downString = "ALTER TABLE `%s` DROP FOREIGN KEY `medicine_medicine_hour`;";
         $downString .= "\n" . "DROP TABLE IF EXISTS `%s`;";
-        return sprintf($downString, MedicineHour::TABLE_NAME, MedicineHour::TABLE_NAME);
+        $finalDownString = sprintf($downString, MedicineHour::TABLE_NAME, MedicineHour::TABLE_NAME);
+        return $finalDownString;
+    }
+
+    public function getTableName(): string
+    {
+        return MedicineHour::TABLE_NAME;
     }
 }
 

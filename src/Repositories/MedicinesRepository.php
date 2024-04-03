@@ -32,5 +32,6 @@ class MedicinesRepository extends AbstractRepository implements MedicineReposito
         $insertQuery = 'INSERT INTO ' . Medicine::TABLE_NAME . ' (name) VALUES (:name);';
         $preResult = $this->pdo->prepare($insertQuery);
         $preResult->execute([':name' => $medicine->name]);
+        $medicine->setId((int) $this->pdo->lastInsertId());
     }
 }

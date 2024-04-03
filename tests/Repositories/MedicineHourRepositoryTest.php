@@ -32,14 +32,13 @@ class MedicineHourRepositoryTest extends TestCaseDB
         $this->renewByMigration(new MedicineHourMigration());
         
         $medicine = $this->createTestingMedicine("Alopurinol 40mg");
-        $medicine->setId(5);
         $this->medicinesRepository->save($medicine);
         
         $this->medicineHourRepository->addManagementHour(11, $medicine);
         
         $this->assertSame(
             "11:00:00",
-            $this->medicineHourRepository->getMenagementHour()
+            $this->medicineHourRepository->getMenagementHours($medicine)[0]->hour
         );
     }
 }

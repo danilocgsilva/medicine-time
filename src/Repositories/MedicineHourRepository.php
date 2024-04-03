@@ -7,6 +7,7 @@ namespace Danilocgsilva\MedicineTime\Repositories;
 use Danilocgsilva\MedicineTime\Repositories\Interfaces\MedicineHourInterface;
 use Danilocgsilva\MedicineTime\Entities\Medicine;
 use Danilocgsilva\MedicineTime\Entities\MedicineHour;
+use PDO;
 
 class MedicineHourRepository extends AbstractRepository implements MedicineHourInterface
 {
@@ -20,9 +21,17 @@ class MedicineHourRepository extends AbstractRepository implements MedicineHourI
         return $this;
     }
 
-    public function getMenagementHour(Medicine $medicine): string
+    public function getMenagementHours(Medicine $medicine): array
     {
-        $query = "SELECT ";
-        return "";
+        $query = "SELECT hour FROM %s WHERE medicine_id = :medicine_id;";
+        $preReresults = $this->pdo->prepare(sprintf($query, MedicineHour::TABLE_NAME));
+        $preReresults->execute([':medicine_id' => $medicine->id]);
+        $preReresults->setFetchMode(PDO::FETCH_CLASS, MedicineHour::class);
+        $hours = [];
+        while ($row = $preReresults->fetch()) {
+            $hours[] = $row;
+        }
+
+        return $hours;
     }
 }

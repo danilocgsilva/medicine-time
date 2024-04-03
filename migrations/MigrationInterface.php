@@ -21,4 +21,11 @@ interface MigrationInterface
      * @return string
      */
     public function getDownString(): string;
+
+    /**
+     * Get the table name
+     *
+     * @return string
+     */
+    public function getTableName(): string;
 }

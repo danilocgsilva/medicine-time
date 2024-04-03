@@ -28,4 +28,10 @@ EOT;
         $downString = 'DROP TABLE IF EXISTS %s;';
         return sprintf($downString, Medicine::TABLE_NAME);
     }
+
+    /** @inheritDoc */
+    public function getTableName(): string
+    {
+        return Medicine::TABLE_NAME;
+    }
 }

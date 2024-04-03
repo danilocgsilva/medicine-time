@@ -22,5 +22,5 @@ interface MedicineHourInterface
      * @param Medicine $medicine
      * @return string
      */
-    public function getMenagementHour(Medicine $medicine): string;
+    public function getMenagementHours(Medicine $medicine): array;
 }

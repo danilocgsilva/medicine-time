@@ -7,4 +7,6 @@ namespace Danilocgsilva\MedicineTime\Entities;
 class MedicineHour
 {
     public const TABLE_NAME = "medicines_hour";
+
+    public readonly string $hour;
 }
