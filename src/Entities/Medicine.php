@@ -27,6 +27,11 @@ class Medicine
         return $this;
     }
 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
     /**
      * Set it to medicine. So in the last id insertion, the object can have consistency in its data.
      *

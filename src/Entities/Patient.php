@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Danilocgsilva\MedicineTime\Entities;
 
-class MedicineHour
+class Patient
 {
-    public const TABLE_NAME = "medicines_hour";
-
     /** @var int $id */
     public readonly int $id;
 
-    public readonly string $hour;
+    public const TABLE_NAME = "patients";
 }
