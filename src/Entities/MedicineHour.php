@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace Danilocgsilva\MedicineTime\Entities;
 
-class MedicineHour
+class MedicineHour extends EntityAbstract
 {
     public const TABLE_NAME = "medicines_hour";
-
-    /** @var int $id */
-    public readonly int $id;
 
     public readonly string $hour;
 }

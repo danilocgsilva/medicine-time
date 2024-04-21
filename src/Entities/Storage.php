@@ -4,24 +4,27 @@ declare(strict_types=1);
 
 namespace Danilocgsilva\MedicineTime\Entities;
 
-class Storage
+class Storage extends EntityAbstract
 {
-    /** @var string $id */
-    public readonly int $id;
 
     public const TABLE_NAME = "storage";
 
     public readonly string $name;
 
     /**
-     * Set it to storage. So in the last id insertion, the object can have consistency in its data.
+     * Returns the storage name
      *
-     * @param integer $id
+     * @param string $name
      * @return self
      */
-    public function setId(int $id): self
+    public function setName(string $name): self
     {
-        $this->id = $id;
+        $this->name = $name;
         return $this;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 }

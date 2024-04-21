@@ -3,17 +3,14 @@
 declare(strict_types=1);
 
 namespace Danilocgsilva\MedicineTime\Entities;
-use Danilocgsilva\MedicineTime\Repositories\Interfaces\MedicineRepositoryInterface;
 
-class Medicine
+class Medicine extends EntityAbstract
 {
     public const TABLE_NAME = "medicines";
     
     /** @var string $name */
     public readonly string $name;
-
-    /** @var string $id */
-    public readonly int $id;
+    
 
     /**
      * Set medicine name
@@ -32,16 +29,11 @@ class Medicine
         return $this->name;
     }
 
-    /**
-     * Set it to medicine. So in the last id insertion, the object can have consistency in its data.
-     *
-     * @param integer $id
-     * @return self
-     */
-    public function setId(int $id): self
+    
+
+    public function getId(): int
     {
-        $this->id = $id;
-        return $this;
+        return $this->id;
     }
 
     

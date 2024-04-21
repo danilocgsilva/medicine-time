@@ -26,7 +26,7 @@ class MedicineTest extends TestCaseDB
         $medicinesRepository->save($medicine);
         $lastInserId = (int) $this->pdo->lastInsertId();
         $recoveredMedicine = $medicinesRepository->list()[0];
-        $this->assertSame($lastInserId, $recoveredMedicine->id);
+        $this->assertSame($lastInserId, $recoveredMedicine->getId());
     }
 }
 

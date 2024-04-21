@@ -17,7 +17,7 @@ class MedicineHourRepository extends AbstractRepository implements MedicineHourI
         $stringHour = $hour . ":00:00";
         $inserQuery = "INSERT INTO %s (hour, medicine_id) VALUES (:hour, :medicine_id);";
         $preResults = $this->pdo->prepare(sprintf($inserQuery, MedicineHour::TABLE_NAME));
-        $preResults->execute([ ':hour' => $stringHour, ':medicine_id' => $medicine->id ]);
+        $preResults->execute([ ':hour' => $stringHour, ':medicine_id' => $medicine->getId() ]);
         return $this;
     }
 
@@ -25,7 +25,7 @@ class MedicineHourRepository extends AbstractRepository implements MedicineHourI
     {
         $query = "SELECT hour FROM %s WHERE medicine_id = :medicine_id;";
         $preReresults = $this->pdo->prepare(sprintf($query, MedicineHour::TABLE_NAME));
-        $preReresults->execute([':medicine_id' => $medicine->id]);
+        $preReresults->execute([':medicine_id' => $medicine->getId()]);
         $preReresults->setFetchMode(PDO::FETCH_CLASS, MedicineHour::class);
         $hours = [];
         while ($row = $preReresults->fetch()) {

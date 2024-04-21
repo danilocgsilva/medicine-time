@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace Danilocgsilva\MedicineTime\Entities;
 
-class Patient
+class Patient extends EntityAbstract
 {
-    /** @var int $id */
-    public readonly int $id;
-
     public const TABLE_NAME = "patients";
+
+    public readonly string $name;
+
+    public function setName(string $patientName): self
+    {
+        $this->name = $patientName;
+        return $this;
+    }
 }
