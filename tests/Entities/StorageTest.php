@@ -6,7 +6,7 @@ namespace Danilocgsilva\MedicineTime\Tests\Entities;
 
 use Danilocgsilva\MedicineTime\Tests\Commons\StorageTrait;
 use Danilocgsilva\MedicineTime\Tests\Commons\TestCaseDB;
-use Danilocgsilva\MedicineTime\Migrations\StorageMigration;
+use Danilocgsilva\MedicineTime\Migrations\M01StorageMigration;
 use Danilocgsilva\MedicineTime\Repositories\StorageRepository;
 
 class StorageTest extends TestCaseDB
@@ -20,7 +20,7 @@ class StorageTest extends TestCaseDB
 
     public function testAssertId1()
     {
-        $this->renewByMigration(new StorageMigration());
+        $this->renewByMigration(new M01StorageMigration());
         $storage = $this->createTestingStorage("default");
         $storageRepository = new StorageRepository($this->pdo);
         $storageRepository->save($storage);

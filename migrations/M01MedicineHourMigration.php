@@ -7,7 +7,7 @@ namespace Danilocgsilva\MedicineTime\Migrations;
 use Danilocgsilva\MedicineTime\Entities\Medicine;
 use Danilocgsilva\MedicineTime\Entities\MedicineHour;
 
-class MedicineHourMigration implements MigrationInterface
+class M01MedicineHourMigration implements MigrationInterface
 {
     /** @inheritDoc */
     public function getUpString(): string

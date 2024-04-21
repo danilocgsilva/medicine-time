@@ -5,7 +5,7 @@ declare(strict_types= 1);
 namespace Danilocgsilva\MedicineTime\Tests\Repositories;
 
 use Danilocgsilva\MedicineTime\Repositories\MedicinesRepository;
-use Danilocgsilva\MedicineTime\Migrations\MedicinesMigration;
+use Danilocgsilva\MedicineTime\Migrations\M01MedicinesMigration;
 use Danilocgsilva\MedicineTime\Tests\Commons\TestCaseDB;
 use Danilocgsilva\MedicineTime\Tests\Commons\MedicineTrait;
 
@@ -24,7 +24,7 @@ class MedicineRepositoryTest extends TestCaseDB
     
     public function testSaveAndRecover()
     {
-        $this->renewByMigration(new MedicinesMigration());
+        $this->renewByMigration(new M01MedicinesMigration());
         
         $medicine = $this->createTestingMedicine("Cilostazol 100mg");
         $this->medicinesRepository->save($medicine);

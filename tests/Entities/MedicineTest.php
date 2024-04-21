@@ -7,7 +7,7 @@ namespace Danilocgsilva\MedicineTime\Tests\Entities;
 use Danilocgsilva\MedicineTime\Repositories\MedicinesRepository;
 use Danilocgsilva\MedicineTime\Tests\Commons\TestCaseDB;
 use Danilocgsilva\MedicineTime\Tests\Commons\MedicineTrait;
-use Danilocgsilva\MedicineTime\Migrations\MedicinesMigration;
+use Danilocgsilva\MedicineTime\Migrations\M01MedicinesMigration;
 
 class MedicineTest extends TestCaseDB
 {
@@ -20,7 +20,7 @@ class MedicineTest extends TestCaseDB
     
     public function testAssertId1()
     {
-        $this->renewByMigration(new MedicinesMigration());
+        $this->renewByMigration(new M01MedicinesMigration());
         $medicine = $this->createTestingMedicine("Cilostazol 100mg");
         $medicinesRepository = new MedicinesRepository($this->pdo);
         $medicinesRepository->save($medicine);

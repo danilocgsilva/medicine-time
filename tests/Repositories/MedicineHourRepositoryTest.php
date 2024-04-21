@@ -3,12 +3,13 @@
 declare(strict_types= 1);
 
 namespace Danilocgsilva\MedicineTime\Tests\Repositories;
+
 use Danilocgsilva\MedicineTime\Repositories\MedicinesRepository;
 use Danilocgsilva\MedicineTime\Tests\Commons\TestCaseDB;
 use Danilocgsilva\MedicineTime\Repositories\MedicineHourRepository;
 use Danilocgsilva\MedicineTime\Tests\Commons\MedicineTrait;
-use Danilocgsilva\MedicineTime\Migrations\MedicineHourMigration;
-use Danilocgsilva\MedicineTime\Migrations\MedicinesMigration;
+use Danilocgsilva\MedicineTime\Migrations\M01MedicineHourMigration;
+use Danilocgsilva\MedicineTime\Migrations\M01MedicinesMigration;
 
 class MedicineHourRepositoryTest extends TestCaseDB
 {
@@ -28,8 +29,8 @@ class MedicineHourRepositoryTest extends TestCaseDB
     
     public function testSaveAndGet(): void
     {
-        $this->renewByMigration(new MedicinesMigration());
-        $this->renewByMigration(new MedicineHourMigration());
+        $this->renewByMigration(new M01MedicinesMigration());
+        $this->renewByMigration(new M01MedicineHourMigration());
         
         $medicine = $this->createTestingMedicine("Alopurinol 40mg");
         $this->medicinesRepository->save($medicine);

@@ -4,7 +4,7 @@ declare(strict_types= 1);
 
 namespace Danilocgsilva\MedicineTime\Tests\Repositories;
 
-use Danilocgsilva\MedicineTime\Migrations\StorageMigration;
+use Danilocgsilva\MedicineTime\Migrations\M01StorageMigration;
 use Danilocgsilva\MedicineTime\Repositories\StorageRepository;
 use Danilocgsilva\MedicineTime\Tests\Commons\TestCaseDB;
 use Danilocgsilva\MedicineTime\Tests\Commons\StorageTrait;
@@ -24,7 +24,7 @@ class StorageRepositoryTest extends TestCaseDB
     
     public function testSaveAndRecover()
     {
-        $this->renewByMigration(new StorageMigration());
+        $this->renewByMigration(new M01StorageMigration());
         
         $storage = $this->createTestingStorage("default");
         $this->storageRepository->save($storage);

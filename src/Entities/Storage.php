@@ -6,7 +6,6 @@ namespace Danilocgsilva\MedicineTime\Entities;
 
 class Storage extends EntityAbstract
 {
-
     public const TABLE_NAME = "storage";
 
     public readonly string $name;
@@ -26,5 +25,10 @@ class Storage extends EntityAbstract
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function remainignPills(): int
+    {
+
     }
 }

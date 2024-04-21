@@ -4,8 +4,7 @@ declare(strict_types= 1);
 
 namespace Danilocgsilva\MedicineTime\Tests\Repositories;
 
-use Danilocgsilva\MedicineTime\Repositories\MedicinesRepository;
-use Danilocgsilva\MedicineTime\Migrations\PatientMigration;
+use Danilocgsilva\MedicineTime\Migrations\M01PatientMigration;
 use Danilocgsilva\MedicineTime\Repositories\PatientRepository;
 use Danilocgsilva\MedicineTime\Tests\Commons\TestCaseDB;
 use Danilocgsilva\MedicineTime\Tests\Commons\PatientTrait;
@@ -25,7 +24,7 @@ class PatientRepositoryTest extends TestCaseDB
     
     public function testSaveAndRecover()
     {
-        $this->renewByMigration(new PatientMigration());
+        $this->renewByMigration(new M01PatientMigration());
         
         $patient = $this->createTestingPatient("John Doe");
         $this->patientRepository->save($patient);

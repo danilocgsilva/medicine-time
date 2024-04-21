@@ -6,7 +6,7 @@ namespace Danilocgsilva\MedicineTime\Migrations;
 
 use Danilocgsilva\MedicineTime\Entities\Patient;
 
-class PatientMigration implements MigrationInterface
+class M01PatientMigration implements MigrationInterface
 {
     /** @inheritDoc */
     public function getDownString(): string
