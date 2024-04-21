@@ -26,4 +26,12 @@ class StorageRepository extends AbstractRepository implements StorageRepositoryI
         
         return $list;
     }
+
+    public function save(Storage $storage): void
+    {
+        $insertQuery = 'INSERT INTO ' . Storage::TABLE_NAME . ' (name) VALUES (:name);';
+        $preResult = $this->pdo->prepare($insertQuery);
+        $preResult->execute([':name' => $storage->name]);
+        $storage->setId((int) $this->pdo->lastInsertId());
+    }
 }

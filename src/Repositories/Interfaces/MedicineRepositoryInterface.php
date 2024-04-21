@@ -15,5 +15,11 @@ interface MedicineRepositoryInterface
      */
     public function list(): array;
 
+    /**
+     * Register a medicine in the database
+     *
+     * @param Medicine $medicine
+     * @return void
+     */
     public function save(Medicine $medicine): void;
 }

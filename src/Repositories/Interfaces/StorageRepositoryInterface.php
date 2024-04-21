@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Danilocgsilva\MedicineTime\Repositories\Interfaces;
 
+use Danilocgsilva\MedicineTime\Entities\Storage;
+
 interface StorageRepositoryInterface
 {
     /**
@@ -12,4 +14,12 @@ interface StorageRepositoryInterface
      * @return \Danilocgsilva\MedicineTime\Entities\Storage[]
      */
     public function list(): array;
+
+    /**
+     * Registers a storage.
+     *
+     * @param Storage $storage
+     * @return void
+     */
+    public function save(Storage $storage): void;
 }
