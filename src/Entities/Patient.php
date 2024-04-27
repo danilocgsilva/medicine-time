@@ -10,6 +10,8 @@ class Patient extends EntityAbstract
 
     public readonly string $name;
 
+    public array $medicines = [];
+
     public function setName(string $patientName): self
     {
         $this->name = $patientName;
@@ -19,5 +21,16 @@ class Patient extends EntityAbstract
     public function getId(): int
     {
         return (int) $this->id;
+    }
+
+    public function assignMedicine(Medicine $medicine): self
+    {
+        $this->medicines[] = $medicine;
+        return $this;
+    }
+
+    public function getMedicinesRequired(): array
+    {
+        return $this->medicines;
     }
 }
