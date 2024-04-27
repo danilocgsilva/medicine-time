@@ -15,4 +15,9 @@ class Patient extends EntityAbstract
         $this->name = $patientName;
         return $this;
     }
+
+    public function getId(): int
+    {
+        return (int) $this->id;
+    }
 }

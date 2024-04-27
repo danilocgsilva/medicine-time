@@ -29,13 +29,10 @@ class Medicine extends EntityAbstract
         return $this->name;
     }
 
-    
-
     public function getId(): int
     {
-        return $this->id;
+        return (int) $this->id;
     }
-
     
     public function addManagementHour(int $hour): self
     {
