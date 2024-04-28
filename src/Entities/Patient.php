@@ -29,6 +29,11 @@ class Patient extends EntityAbstract
         return $this;
     }
 
+    /**
+     * Return a list of medicines for a patient
+     *
+     * @return \Danilocgsilva\MedicineTime\Entities\Medicine[]
+     */
     public function getMedicinesRequired(): array
     {
         return $this->medicines;
