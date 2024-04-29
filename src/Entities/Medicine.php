@@ -33,14 +33,4 @@ class Medicine extends EntityAbstract
     {
         return (int) $this->id;
     }
-    
-    public function addManagementHour(int $hour): self
-    {
-        return $this;
-    }
-
-    public function getManagementHours()
-    {
-
-    }
 }

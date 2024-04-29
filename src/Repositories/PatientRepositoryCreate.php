@@ -8,6 +8,7 @@ use Danilocgsilva\MedicineTime\Repositories\Interfaces\PatientRepositoryInterfac
 use Danilocgsilva\MedicineTime\Entities\Patient;
 use PDO;
 use Danilocgsilva\MedicineTime\Repositories\MedicinesRepository;
+use Danilocgsilva\MedicineTime\Entities\MedicineHour;
 
 class PatientRepositoryCreate extends AbstractRepository
 {
@@ -47,7 +48,7 @@ class PatientRepositoryCreate extends AbstractRepository
             $medicineRepository = new MedicinesRepository($this->pdo);
             $medicineRepository->save($medicineAssigned);
             
-            $assigmentMedicineQuery = "INSERT INTO medicine_patient (medicine_id, patient_id) VALUES (:medicine_id, :patient_id);";
+            $assigmentMedicineQuery = sprintf("INSERT INTO %s (medicine_id, patient_id) VALUES (:medicine_id, :patient_id);", MedicineHour::TABLE_NAME);
             $preResult = $this->pdo->prepare($assigmentMedicineQuery);
             $preResult->execute([
                 ':medicine_id' => $medicineAssigned->getId(),

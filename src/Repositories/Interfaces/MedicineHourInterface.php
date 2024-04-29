@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Danilocgsilva\MedicineTime\Repositories\Interfaces;
 
 use Danilocgsilva\MedicineTime\Entities\Medicine;
+use Danilocgsilva\MedicineTime\Entities\Patient;
 
 interface MedicineHourInterface
 {
@@ -14,7 +15,7 @@ interface MedicineHourInterface
      * @param integer $hour
      * @return self
      */
-    public function addManagementHour(int $hour, Medicine $medicine): self;
+    public function addManagementHour(int $hour, Medicine $medicine, Patient $patient): self;
 
     /**
      * Fetches the medicine managemente hour.

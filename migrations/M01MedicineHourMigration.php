@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Danilocgsilva\MedicineTime\Migrations;
 
 use Danilocgsilva\MedicineTime\Entities\Medicine;
+use Danilocgsilva\MedicineTime\Entities\Patient;
 use Danilocgsilva\MedicineTime\Entities\MedicineHour;
 
 class M01MedicineHourMigration implements MigrationInterface
@@ -15,14 +16,24 @@ class M01MedicineHourMigration implements MigrationInterface
         $upString = <<<EOT
 CREATE TABLE `%s` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `hour` TIME NOT NULL,
+    `hour` TIME,
     `medicine_id` INT UNSIGNED NOT NULL,
+    `patient_id` INT UNSIGNED NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 ALTER TABLE `%s` ADD CONSTRAINT `medicine_medicine_hour` FOREIGN KEY (`medicine_id`) REFERENCES `%s` (`id`);
+
+ALTER TABLE `%s` ADD CONSTRAINT `medicine_hour_patient` FOREIGN KEY (`patient_id`) REFERENCES `%s` (`id`);
 EOT;
-        $migrationString = sprintf($upString, MedicineHour::TABLE_NAME, MedicineHour::TABLE_NAME, Medicine::TABLE_NAME);
+        $migrationString = sprintf(
+            $upString, 
+            MedicineHour::TABLE_NAME, 
+            MedicineHour::TABLE_NAME,
+            Medicine::TABLE_NAME,
+            MedicineHour::TABLE_NAME,
+            Patient::TABLE_NAME
+        );
         return $migrationString;
     }
 

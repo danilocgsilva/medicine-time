@@ -6,10 +6,9 @@ namespace Danilocgsilva\MedicineTime\Repositories;
 
 use Danilocgsilva\MedicineTime\Repositories\Interfaces\PatientRepositoryInterface;
 use Danilocgsilva\MedicineTime\Entities\Patient;
-use Danilocgsilva\MedicineTime\Entities\Medicine;
 use Danilocgsilva\MedicineTime\Repositories\MedicinesRepository;
 use PDO;
-use Danilocgsilva\MedicineTime\Migrations\M02MedicinePatientMigration;
+use Danilocgsilva\MedicineTime\Entities\MedicineHour;
 
 class PatientRepository extends AbstractRepository implements PatientRepositoryInterface
 {
@@ -42,13 +41,11 @@ class PatientRepository extends AbstractRepository implements PatientRepositoryI
     /** @inheritDoc */
     public function hasMedicineAssigment(Patient $patient): bool
     {
-        $m02MedicinePatientMigration = new M02MedicinePatientMigration();
-
         $checkQuery = "SELECT COUNT(`id`) as count_id FROM %s WHERE patient_id = :patient_id;";
         $preResult = $this->pdo->prepare(
             sprintf(
                 $checkQuery, 
-                $m02MedicinePatientMigration->getTableName()
+                MedicineHour::TABLE_NAME
             )
         );
 
@@ -61,23 +58,20 @@ class PatientRepository extends AbstractRepository implements PatientRepositoryI
     }
 
     /**
-     * Undocumented function
+     * When fetching patient list, patients may have medicines assigned to then.
+     * This must reflects in the returned patient list.
      *
      * @param \Danilocgsilva\MedicineTime\Entities\Patient[]
      * @return void
      */
-    private function assingMedicineAssigmentsToListMember(array &$patientsList)
+    private function assingMedicineAssigmentsToListMember(array &$patientsList): void
     {
-        $patientIds = [];
-        foreach ($patientsList as $patient) {
-            $patientIds[] = $patient->getId();
-        }
-        $checkAssignedMedicinesQuery = sprintf(
-            "SELECT medicine_id, patient_id FROM %s WHERE patient_id IN (%s);", 
-            (new M02MedicinePatientMigration())->getTableName(), 
-            implode(", ", $patientIds)
+        $getRelationShipQuery = sprintf(
+            "SELECT medicine_id, patient_id FROM %s WHERE patient_id IN (%s);",
+            MedicineHour::TABLE_NAME,
+            implode(", ", array_map(fn ($entry) => $entry->getId(), $patientsList) )
         );
-        $preResults = $this->pdo->prepare($checkAssignedMedicinesQuery);
+        $preResults = $this->pdo->prepare($getRelationShipQuery);
         $preResults->execute();
         $preResults->setFetchMode(PDO::FETCH_ASSOC);
         $medicineRepository = new MedicinesRepository($this->pdo);

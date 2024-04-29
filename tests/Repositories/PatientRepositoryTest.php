@@ -10,7 +10,7 @@ use Danilocgsilva\MedicineTime\Repositories\PatientRepository;
 use Danilocgsilva\MedicineTime\Tests\Commons\MedicineTrait;
 use Danilocgsilva\MedicineTime\Tests\Commons\TestCaseDB;
 use Danilocgsilva\MedicineTime\Tests\Commons\PatientTrait;
-use Danilocgsilva\MedicineTime\Migrations\M02MedicinePatientMigration;
+use Danilocgsilva\MedicineTime\Migrations\M01MedicineHourMigration;
 
 class PatientRepositoryTest extends TestCaseDB
 {
@@ -58,7 +58,7 @@ class PatientRepositoryTest extends TestCaseDB
     public function testHasMedicineAssigmentFalse()
     {
         $this->renewByMigration(new M01PatientMigration());
-        $this->renewByMigration(new M02MedicinePatientMigration());
+        $this->renewByMigration(new M01MedicineHourMigration());
 
         $patient = $this->createTestingPatient("Evelyn Martins");
         $this->patientRepository->save($patient);
@@ -71,7 +71,7 @@ class PatientRepositoryTest extends TestCaseDB
     public function testHasMedicineAssigmentTrue()
     {
         $this->renewByMigration(new M01PatientMigration());
-        $this->renewByMigration(new M02MedicinePatientMigration());
+        $this->renewByMigration(new M01MedicineHourMigration());
 
         $patient = $this->createTestingPatient("Evelyn Martins");
         $medicine = $this->createTestingMedicine("Cilostazol 100mg");
