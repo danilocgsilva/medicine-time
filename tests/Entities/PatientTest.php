@@ -20,6 +20,8 @@ class PatientTest extends TestCaseDB
     public function testAssertId1()
     {
         $this->renewByMigration(new M01PatientMigration());
+        $this->renewByMigration(new M02MedicinePatientMigration());
+
         $patient = $this->createTestingPatient("John Mike");
         $patientRepository = new PatientRepository($this->pdo);
         $patientRepository->save($patient);

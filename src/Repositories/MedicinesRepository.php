@@ -34,4 +34,30 @@ class MedicinesRepository extends AbstractRepository implements MedicineReposito
         $preResult->execute([':name' => $medicine->name]);
         $medicine->setId((int) $this->pdo->lastInsertId());
     }
+
+    /** @inheritDoc */
+    public function findManyByIds(array $ids): array
+    {
+        $searchQuery = "SELECT id, name FROM " . Medicine::TABLE_NAME . " WHERE id IN (" . implode(", ", $ids) . ");";
+        $preResults = $this->pdo->prepare($searchQuery);
+        $preResults->execute();
+        $preResults->setFetchMode(PDO::FETCH_CLASS, Medicine::class);
+
+        $medicineList = [];
+        while ($row = $preResults->fetch()) {
+            $medicineList[] = $row;
+        }
+
+        return $medicineList;
+    }
+
+    /** @inheritDoc */
+    public function findById(int $id): Medicine
+    {
+        $searchQuery = "SELECT id, name FROM " . Medicine::TABLE_NAME . " WHERE id = :id;";
+        $preResults = $this->pdo->prepare($searchQuery);
+        $preResults->execute([':id' => $id]);
+        $preResults->setFetchMode(PDO::FETCH_CLASS, Medicine::class);
+        return $preResults->fetch();
+    }
 }

@@ -22,4 +22,20 @@ interface MedicineRepositoryInterface
      * @return void
      */
     public function save(Medicine $medicine): void;
+
+    /**
+     * Return several medicines at once, after receiving the ids.
+     *
+     * @param array $ids
+     * @return \Danilocgsilva\MedicineTime\Entities\Medicine[]
+     */
+    public function findManyByIds(array $ids): array;
+
+    /**
+     * Find a medicine from database by key
+     *
+     * @param integer $id
+     * @return Medicine
+     */
+    public function findById(int $id): Medicine;
 }
