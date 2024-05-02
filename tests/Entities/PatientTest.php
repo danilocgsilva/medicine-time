@@ -10,6 +10,7 @@ use Danilocgsilva\MedicineTime\Tests\Commons\PatientTrait;
 use Danilocgsilva\MedicineTime\Migrations\M01PatientMigration;
 use Danilocgsilva\MedicineTime\Repositories\PatientRepository;
 use Danilocgsilva\MedicineTime\Migrations\M01MedicinesMigration;
+use Danilocgsilva\MedicineTime\Migrations\M01MedicineHourMigration;
 
 class PatientTest extends TestCaseDB
 {
@@ -19,6 +20,7 @@ class PatientTest extends TestCaseDB
     public function testAssertId1()
     {
         $this->renewByMigration(new M01PatientMigration());
+        $this->renewByMigration(new M01MedicineHourMigration());
 
         $patient = $this->createTestingPatient("John Mike");
         $patientRepository = new PatientRepository($this->pdo);

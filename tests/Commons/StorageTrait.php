@@ -14,4 +14,11 @@ trait StorageTrait
         $storage->setName($storageName);
         return $storage;
     }
+
+    protected function storeTestingStorage(string $storageName): Storage
+    {
+        $storage = $this->createTestingStorage($storageName);
+        $this->storageRepository->save($storage);
+        return $storage;
+    }
 }

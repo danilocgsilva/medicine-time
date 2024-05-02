@@ -25,31 +25,24 @@ class MedicineRepositoryTest extends TestCaseDB
     public function testSaveAndRecover()
     {
         $this->renewByMigration(new M01MedicinesMigration());
-        
-        $medicine = $this->createTestingMedicine("Cilostazol 100mg");
-        $this->medicinesRepository->save($medicine);
+        $this->storeTestingMedicine("Cilostazol 100mg");
         $listing = $this->medicinesRepository->list();
-
         $this->assertCount(1, $listing);
     }
 
     public function testFindManyByIdsOneMedicine()
     {
         $this->renewByMigration(new M01MedicinesMigration());
-        $medicine = $this->createTestingMedicine("Cilostazol 100mg");
-        $this->medicinesRepository->save($medicine);
+        $medicine = $this->storeTestingMedicine("Cilostazol 100mg");
         $listing = $this->medicinesRepository->findManyByIds([$medicine->getId()]);
-
         $this->assertCount(1, $listing);
     }
 
     public function testFindManyByIdsThreeMedicines()
     {
         $this->renewByMigration(new M01MedicinesMigration());
-        $medicine1 = $this->createTestingMedicine("Cilostazol 100mg");
-        $medicine2 = $this->createTestingMedicine("Levotiroxina Sódica (50mcg)");
-        $this->medicinesRepository->save($medicine1);
-        $this->medicinesRepository->save($medicine2);
+        $medicine1 = $this->storeTestingMedicine("Cilostazol 100mg");
+        $medicine2 = $this->storeTestingMedicine("Levotiroxina Sódica (50mcg)");
         $listing = $this->medicinesRepository->findManyByIds([
             $medicine1->getId(),
             $medicine2->getId()
@@ -61,8 +54,7 @@ class MedicineRepositoryTest extends TestCaseDB
     public function testFindByKey()
     {
         $this->renewByMigration(new M01MedicinesMigration());
-        $medicine = $this->createTestingMedicine("Cilostazol 100mg");
-        $this->medicinesRepository->save($medicine);
+        $this->storeTestingMedicine("Cilostazol 100mg");
         $recoveredMedicine = $this->medicinesRepository->findById(1);
         $this->assertSame(1, $recoveredMedicine->getId());
         $this->assertSame("Cilostazol 100mg", $recoveredMedicine->getName());

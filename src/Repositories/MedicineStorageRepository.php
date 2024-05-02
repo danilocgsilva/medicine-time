@@ -29,5 +29,11 @@ class MedicineStorageRepository extends AbstractRepository implements MedicineSt
         $query = 'SELECT remaining FROM %s WHERE medicine_id = :medicine_id AND storage_id = :storage_id;';
         $preResult = $this->pdo->prepare(sprintf($query, MedicineStorage::TABLE_NAME));
         $preResult->setFetchMode(PDO::FETCH_CLASS, MedicineStorage::class);
+        $preResult->execute([
+            ':medicine_id' => $medicine->getId(),
+            ':storage_id' => $storage->getId()
+        ]);
+        $remainingRow = $preResult->fetch();
+        return $remainingRow->getRemainingPills();
     }
 }

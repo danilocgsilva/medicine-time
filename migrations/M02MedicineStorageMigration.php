@@ -36,6 +36,6 @@ ALTER TABLE `%s` ADD CONSTRAINT `medicine_constraint` FOREIGN KEY (`medicine_id`
 ALTER TABLE `%s` ADD CONSTRAINT `storage_constraint` FOREIGN KEY (`storage_id`) REFERENCES `storage` (`id`);
 EOT;
 
-        return sprintf($upString, MedicineStorage::TABLE_NAME);
+        return sprintf($upString, MedicineStorage::TABLE_NAME, MedicineStorage::TABLE_NAME, MedicineStorage::TABLE_NAME);
     }
 }
