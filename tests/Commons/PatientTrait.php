@@ -14,4 +14,11 @@ trait PatientTrait
         $patient->setName($patientName);
         return $patient;
     }
+
+    protected function storeTestingPatient(string $patientName): Patient
+    {
+        $testingPatient = $this->createTestingPatient($patientName);
+        $this->patientRepository->save($testingPatient);
+        return $testingPatient;
+    }
 }

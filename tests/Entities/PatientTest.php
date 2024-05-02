@@ -17,16 +17,24 @@ class PatientTest extends TestCaseDB
     use PatientTrait;
     use MedicineTrait;
 
+    private PatientRepository $patientRepository;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->patientRepository = new PatientRepository($this->pdo);
+    }
+
     public function testAssertId1()
     {
         $this->renewByMigration(new M01PatientMigration());
         $this->renewByMigration(new M01MedicineHourMigration());
 
-        $patient = $this->createTestingPatient("John Mike");
-        $patientRepository = new PatientRepository($this->pdo);
-        $patientRepository->save($patient);
+        $patient = $this->storeTestingPatient("John Mike");
+
         $lastInserId = (int) $this->pdo->lastInsertId();
-        $recoveredPatient = $patientRepository->list()[0];
+        $recoveredPatient = $this->patientRepository->list()[0];
         $this->assertSame($lastInserId, $recoveredPatient->getId());
     }
 

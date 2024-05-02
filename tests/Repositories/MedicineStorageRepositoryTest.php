@@ -4,6 +4,7 @@ declare(strict_types= 1);
 
 namespace Danilocgsilva\MedicineTime\Tests\Repositories;
 
+use Danilocgsilva\MedicineTime\Tests\Commons\PatientTrait;
 use Danilocgsilva\MedicineTime\Tests\Commons\TestCaseDB;
 use Danilocgsilva\MedicineTime\Migrations\M02MedicineStorageMigration;
 use Danilocgsilva\MedicineTime\Migrations\M01MedicineHourMigration;
@@ -16,6 +17,8 @@ use Danilocgsilva\MedicineTime\Repositories\MedicineStorageRepository;
 
 class MedicineStorageRepositoryTest extends TestCaseDB
 {
+    use PatientTrait;
+
     private PatientRepository $patientRepository;
 
     private MedicinesRepository $medicineRepository;
@@ -41,5 +44,6 @@ class MedicineStorageRepositoryTest extends TestCaseDB
         $this->renewByMigration(new M01StorageMigration());
         $this->renewByMigration(new M01PatientMigration());
 
+        $patient = $this->storeTestingPatient("Mike Johnson");
     }
 }
