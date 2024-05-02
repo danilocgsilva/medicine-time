@@ -10,7 +10,6 @@ class Medicine extends EntityAbstract
     
     /** @var string $name */
     public readonly string $name;
-    
 
     /**
      * Set medicine name

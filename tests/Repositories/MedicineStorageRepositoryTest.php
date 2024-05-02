@@ -5,6 +5,8 @@ declare(strict_types= 1);
 namespace Danilocgsilva\MedicineTime\Tests\Repositories;
 
 use Danilocgsilva\MedicineTime\Tests\Commons\PatientTrait;
+use Danilocgsilva\MedicineTime\Tests\Commons\MedicineTrait;
+use Danilocgsilva\MedicineTime\Tests\Commons\StorageTrait;
 use Danilocgsilva\MedicineTime\Tests\Commons\TestCaseDB;
 use Danilocgsilva\MedicineTime\Migrations\M02MedicineStorageMigration;
 use Danilocgsilva\MedicineTime\Migrations\M01MedicineHourMigration;
@@ -18,10 +20,12 @@ use Danilocgsilva\MedicineTime\Repositories\MedicineStorageRepository;
 class MedicineStorageRepositoryTest extends TestCaseDB
 {
     use PatientTrait;
+    use MedicineTrait;
+    use StorageTrait;
 
     private PatientRepository $patientRepository;
 
-    private MedicinesRepository $medicineRepository;
+    private MedicinesRepository $medicinesRepository;
 
     private StorageRepository $storageRepository;
 
@@ -44,6 +48,11 @@ class MedicineStorageRepositoryTest extends TestCaseDB
         $this->renewByMigration(new M01StorageMigration());
         $this->renewByMigration(new M01PatientMigration());
 
-        $patient = $this->storeTestingPatient("Mike Johnson");
+        $medicine = $this->storeTestingMedicine("Atovarstatina Cálcica 80mg");
+        $defaultStorage = $this->storeTestingStorage("Default");
+
+        $this->medicineStorageRepository->setRemainingPills($defaultStorage, $medicine, 12);
+
+        $this->assertSame(12, $this->medicineStorageRepository->getRemainingPills($defaultStorage, $medicine));
     }
 }

@@ -12,6 +12,14 @@ use PDO;
 
 class MedicineStorageRepository extends AbstractRepository implements MedicineStorageRepositoryInterface
 {
+    /**
+     * Informs to the system the pills amount for a defined medicine in a give storage.
+     *
+     * @param Storage $storage
+     * @param Medicine $medicine
+     * @param integer $pillsCount
+     * @return void
+     */
     public function setRemainingPills(Storage $storage, Medicine $medicine, int $pillsCount): void
     {
         $queryBase = 'INSERT INTO %s (medicine_id, storage_id, remaining) VALUES (:medicine_id, :storage_id, :remaining);';
@@ -24,6 +32,13 @@ class MedicineStorageRepository extends AbstractRepository implements MedicineSt
         ]);
     }
     
+    /**
+     * Gets the remaining amount of medicine, given the storage and the mecicine.
+     *
+     * @param Storage $storage
+     * @param Medicine $medicine
+     * @return integer
+     */
     public function getRemainingPills(Storage $storage, Medicine $medicine): int
     {
         $query = 'SELECT remaining FROM %s WHERE medicine_id = :medicine_id AND storage_id = :storage_id;';
@@ -34,6 +49,6 @@ class MedicineStorageRepository extends AbstractRepository implements MedicineSt
             ':storage_id' => $storage->getId()
         ]);
         $remainingRow = $preResult->fetch();
-        return $remainingRow->getRemainingPills();
+        return $remainingRow->remaining;
     }
 }

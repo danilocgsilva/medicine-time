@@ -17,7 +17,7 @@ trait MedicineTrait
 
     protected function storeTestingMedicine(string $medicineName): Medicine
     {
-        $medicine = $this->createTestingMedicine("Cilostazol 100mg");
+        $medicine = $this->createTestingMedicine($medicineName);
         $this->medicinesRepository->save($medicine);
         return $medicine;
     }

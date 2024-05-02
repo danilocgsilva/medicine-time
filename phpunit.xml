@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit>
+<phpunit
+    displayDetailsOnTestsThatTriggerDeprecations="true">
     <testsuites>
         <testsuite name="default">
             <directory>./tests</directory>
