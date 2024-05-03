@@ -62,18 +62,16 @@ class MedicineStorageRepository extends AbstractRepository implements MedicineSt
             ':medicine_id' => $medicine->getId(),
             ':storage_id' => $storage->getId()
         ]);
-        /** @var array */
-        $remainingRow = $preResult->fetch();
 
-        $remaining = $this->generateMedicineStorageFromFields($remainingRow);
-
-        if ($datetime === "") {
-            return $remaining->remaining;
+        /** @var \Danilocgsilva\MedicineTime\Entities\MedicineStorage[] */
+        $consumingMedicines = [];
+        while ($row = $preResult->fetch()) {
+            $consumingMedicines[] = $this->generateMedicineStorageFromFields($row);
         }
 
-        $interval = $datetime->diff($remaining->register_time);
+        $interval = $datetime->diff($consumingMedicines[0]->register_time);
 
-        return $remaining->remaining - $interval->format('%a');
+        return $consumingMedicines[0]->remaining - $interval->format('%a');
     }
 
     private function generateMedicineStorageFromFields(array $row): MedicineStorage
