@@ -10,12 +10,14 @@ use Danilocgsilva\MedicineTime\Tests\Commons\StorageTrait;
 use Danilocgsilva\MedicineTime\Tests\Commons\TestCaseDB;
 use Danilocgsilva\MedicineTime\Migrations\M02MedicineStorageMigration;
 use Danilocgsilva\MedicineTime\Migrations\M01MedicineHourMigration;
+use Danilocgsilva\MedicineTime\Migrations\M01MedicinesMigration;
 use Danilocgsilva\MedicineTime\Migrations\M01StorageMigration;
 use Danilocgsilva\MedicineTime\Migrations\M01PatientMigration;
 use Danilocgsilva\MedicineTime\Repositories\PatientRepository;
 use Danilocgsilva\MedicineTime\Repositories\StorageRepository;
 use Danilocgsilva\MedicineTime\Repositories\MedicinesRepository;
 use Danilocgsilva\MedicineTime\Repositories\MedicineStorageRepository;
+use Danilocgsilva\MedicineTime\Repositories\MedicineHourRepository;
 
 class MedicineStorageRepositoryTest extends TestCaseDB
 {
@@ -44,9 +46,9 @@ class MedicineStorageRepositoryTest extends TestCaseDB
     public function testSetAndGetRemainingPills()
     {
         $this->renewByMigration(new M02MedicineStorageMigration());
+        $this->renewByMigration(new M01MedicinesMigration());
         $this->renewByMigration(new M01MedicineHourMigration());
         $this->renewByMigration(new M01StorageMigration());
-        $this->renewByMigration(new M01PatientMigration());
 
         $medicine = $this->storeTestingMedicine("Atovarstatina Cálcica 80mg");
         $defaultStorage = $this->storeTestingStorage("Default");
@@ -54,5 +56,65 @@ class MedicineStorageRepositoryTest extends TestCaseDB
         $this->medicineStorageRepository->setRemainingPills($defaultStorage, $medicine, 12);
 
         $this->assertSame(12, $this->medicineStorageRepository->getRemainingPills($defaultStorage, $medicine));
+    }
+
+    public function testSetAndGetRemainingPillsWithDate()
+    {
+        $this->renewByMigration(new M02MedicineStorageMigration());
+        $this->renewByMigration(new M01MedicinesMigration());
+        $this->renewByMigration(new M01MedicineHourMigration());
+        $this->renewByMigration(new M01StorageMigration());
+
+        $medicine = $this->storeTestingMedicine("Atovarstatina Cálcica 80mg");
+        $defaultStorage = $this->storeTestingStorage("Default");
+        $dateTime = "2024-04-15 00:00:00";
+
+        $this->medicineStorageRepository->setRemainingPills($defaultStorage, $medicine, 12, $dateTime);
+
+        $this->assertSame(12, $this->medicineStorageRepository->getRemainingPills($defaultStorage, $medicine));
+    }
+
+    public function testSetAndGetRemainingPillsWithDateAndConsumingPatient()
+    {
+        $this->renewByMigration(new M02MedicineStorageMigration());
+        $this->renewByMigration(new M01MedicinesMigration());
+        $this->renewByMigration(new M01MedicineHourMigration());
+        $this->renewByMigration(new M01StorageMigration());
+        $this->renewByMigration(new M01PatientMigration());
+
+        $medicine = $this->storeTestingMedicine("Atovarstatina Cálcica 80mg");
+        $defaultStorage = $this->storeTestingStorage("Default");
+        $dateTime = "2024-04-15 00:00:00";
+        $consumingPatient = $this->storeTestingPatient("Renan Dias");
+
+        $this->medicineStorageRepository->setRemainingPills($defaultStorage, $medicine, 7, $dateTime);
+
+        $medicineHourRepository = new MedicineHourRepository($this->pdo);
+
+        $medicineHourRepository->addManagementHour(9, $medicine, $consumingPatient);
+
+        $this->assertSame(7, $this->medicineStorageRepository->getRemainingPills($defaultStorage, $medicine));
+    }
+
+    public function testSetAndGetRemainingPillsWithDateAndConsumingPatientWithDifferenteDate()
+    {
+        $this->renewByMigration(new M02MedicineStorageMigration());
+        $this->renewByMigration(new M01MedicinesMigration());
+        $this->renewByMigration(new M01MedicineHourMigration());
+        $this->renewByMigration(new M01StorageMigration());
+        $this->renewByMigration(new M01PatientMigration());
+
+        $medicine = $this->storeTestingMedicine("Atovarstatina Cálcica 80mg");
+        $defaultStorage = $this->storeTestingStorage("Default");
+        $dateTime = "2024-04-15 00:00:00";
+        $consumingPatient = $this->storeTestingPatient("Renan Dias");
+
+        $this->medicineStorageRepository->setRemainingPills($defaultStorage, $medicine, 7, $dateTime);
+
+        $medicineHourRepository = new MedicineHourRepository($this->pdo);
+
+        $medicineHourRepository->addManagementHour(9, $medicine, $consumingPatient);
+
+        $this->assertSame(5, $this->medicineStorageRepository->getRemainingPills($defaultStorage, $medicine, "2024-04-17 00:00:00"));
     }
 }

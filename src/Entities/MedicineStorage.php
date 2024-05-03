@@ -17,9 +17,4 @@ class MedicineStorage extends EntityAbstract
     public readonly int $remaining;
 
     public readonly DateTime $register_time;
-
-    public function getRemainingPills(): int
-    {
-        return (int) $this->remaining;
-    }
 }
