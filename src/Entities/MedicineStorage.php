@@ -17,4 +17,21 @@ class MedicineStorage extends EntityAbstract
     public readonly int $remaining;
 
     public readonly DateTime $register_time;
+
+    public function setRemaining(int $remaining): MedicineStorage
+    {
+        $this->remaining = $remaining;
+        return $this;
+    }
+
+    public function setRegisterTime(DateTime $registerTime): MedicineStorage
+    {
+        $this->register_time = $registerTime;
+        return $this;
+    }
+
+    public function getRegisterTime(): DateTime
+    {
+        return $this->register_time;
+    }
 }
