@@ -18,7 +18,7 @@ class MedicineHourRepository extends AbstractRepository implements MedicineHourI
         $stringHour = $hour . ":00:00";
         $inserQuery = "INSERT INTO %s (hour, medicine_id, patient_id) VALUES (:hour, :medicine_id, :patient_id);";
         $preResults = $this->pdo->prepare(sprintf($inserQuery, MedicineHour::TABLE_NAME));
-        $preResults->execute([ 
+        $preResults->execute([
             ':hour' => $stringHour, 
             ':medicine_id' => $medicine->getId(),
             ':patient_id' => $patient->getId()
@@ -26,7 +26,7 @@ class MedicineHourRepository extends AbstractRepository implements MedicineHourI
         return $this;
     }
 
-    public function getMenagementHours(Medicine $medicine): array
+    public function getManagementHours(Medicine $medicine): array
     {
         $query = "SELECT hour FROM %s WHERE medicine_id = :medicine_id;";
         $preReresults = $this->pdo->prepare(sprintf($query, MedicineHour::TABLE_NAME));
