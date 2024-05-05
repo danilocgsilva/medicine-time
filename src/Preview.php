@@ -19,7 +19,8 @@ class Preview
     /**
      * Checks the amount of a given medicine consumed by a period.
      *
-     * @param DateInterval $dateInterval
+     * @param DateTime $start
+     * @param DateTime $end
      * @param Medicine $medicine
      * @param MedicineHourRepository $medicineHourRepository
      * @return int
@@ -35,7 +36,13 @@ class Preview
             throw new Exception("The end date must stay after the start date.");
         }
 
+        $countConsumed = 0;
         $interval = date_diff($end, $start);
         $containingDaysInInterval = (int) $interval->format('%a') + 1;
+        /** @var \Danilocgsilva\MedicineTime\Entities\MedicineHour[] */
+        $occurrences = $medicineHourRepository->getManagementHours($medicine);
+
+        $countConsumed += count($occurrences) * $containingDaysInInterval;
+        return 123;
     }
 }

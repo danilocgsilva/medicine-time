@@ -23,7 +23,14 @@ class PreviewTest extends TestCaseDB
         $storage = $this->createStorageInDatabase();
         $preview = new Preview();
 
-        $this->assertSame(0, 0);
+        $this->assertSame(0, 1);
+    }
+
+    public function testConsumingByPeriod()
+    {
+        $preview = new Preview();
+
+        $preview->consumingByPeriod(DateTime::createFromFormat(""))
     }
 
     private function createMedicineInDatabase()

@@ -48,7 +48,7 @@ class MedicineHourRepositoryTest extends TestCaseDB
         
         $this->assertSame(
             "11:00:00",
-            $this->medicineHourRepository->getMenagementHours($medicine)[0]->hour
+            $this->medicineHourRepository->getManagementHours($medicine)[0]->hour
         );
     }
 }

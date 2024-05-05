@@ -26,6 +26,12 @@ class MedicineHourRepository extends AbstractRepository implements MedicineHourI
         return $this;
     }
 
+    /**
+     * Fetches all management hours for a given medicine.
+     *
+     * @param Medicine $medicine
+     * @return \Danilocgsilva\MedicineTime\Entities\MedicineHour[]
+     */
     public function getManagementHours(Medicine $medicine): array
     {
         $query = "SELECT hour FROM %s WHERE medicine_id = :medicine_id;";
