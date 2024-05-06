@@ -37,12 +37,20 @@ class Preview
         }
 
         $countConsumed = 0;
-        $interval = date_diff($end, $start);
-        $containingDaysInInterval = (int) $interval->format('%a') + 1;
         /** @var \Danilocgsilva\MedicineTime\Entities\MedicineHour[] */
         $occurrences = $medicineHourRepository->getManagementHours($medicine);
+        $ocurrenceHour = $occurrences[0]->hour;
+        $firstHour = (int) substr($ocurrenceHour, 0, 6);
+        if ($firstHour > (int) $start->format("H")) {
+            $countConsumed++;
+        }
+        
+        // $interval = date_diff($end, $start);
+        // $containingDaysInInterval = (int) $interval->format('%a') + 1;
 
-        $countConsumed += count($occurrences) * $containingDaysInInterval;
-        return 123;
+        // $countConsumed += count($occurrences) * $containingDaysInInterval;
+        // return $countConsumed;
+
+        return $countConsumed;
     }
 }

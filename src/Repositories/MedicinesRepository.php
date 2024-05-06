@@ -7,6 +7,7 @@ namespace Danilocgsilva\MedicineTime\Repositories;
 use Danilocgsilva\MedicineTime\Repositories\Interfaces\MedicineRepositoryInterface;
 use PDO;
 use Danilocgsilva\MedicineTime\Entities\Medicine;
+use Exception;
 
 class MedicinesRepository extends AbstractRepository implements MedicineRepositoryInterface
 {
@@ -58,6 +59,10 @@ class MedicinesRepository extends AbstractRepository implements MedicineReposito
         $preResults = $this->pdo->prepare($searchQuery);
         $preResults->execute([':id' => $id]);
         $preResults->setFetchMode(PDO::FETCH_CLASS, Medicine::class);
-        return $preResults->fetch();
+        $medicine = $preResults->fetch();
+        if (!$medicine) {
+            throw new Exception("Medicine does not exists in database.");
+        }
+        return $medicine;
     }
 }
