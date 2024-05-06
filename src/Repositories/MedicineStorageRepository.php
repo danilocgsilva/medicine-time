@@ -44,35 +44,6 @@ class MedicineStorageRepository extends AbstractRepository implements MedicineSt
         
         $preResult->execute($baseExecuteParameters);
     }
-    
-    /**
-     * Gets the remaining amount of medicine, given the storage and the mecicine.
-     *
-     * @param Storage $storage   The storage
-     * @param Medicine $medicine The medicine
-     * @param DateTime $datetime A date for consuting
-     * @return integer
-     */
-    public function getRemainingPills(Storage $storage, Medicine $medicine, DateTime $datetime = new DateTime()): int
-    {
-        $query = 'SELECT remaining, register_time FROM %s WHERE medicine_id = :medicine_id AND storage_id = :storage_id;';
-        $preResult = $this->pdo->prepare(sprintf($query, MedicineStorage::TABLE_NAME));
-        $preResult->setFetchMode(PDO::FETCH_ASSOC);
-        $preResult->execute([
-            ':medicine_id' => $medicine->getId(),
-            ':storage_id' => $storage->getId()
-        ]);
-
-        /** @var \Danilocgsilva\MedicineTime\Entities\MedicineStorage[] */
-        $consumingMedicines = [];
-        while ($row = $preResult->fetch()) {
-            $consumingMedicines[] = $this->generateMedicineStorageFromFields($row);
-        }
-
-        $interval = $datetime->diff($consumingMedicines[0]->register_time);
-
-        return $consumingMedicines[0]->remaining - $interval->format('%a');
-    }
 
     private function generateMedicineStorageFromFields(array $row): MedicineStorage
     {
@@ -84,5 +55,28 @@ class MedicineStorageRepository extends AbstractRepository implements MedicineSt
         );
         $remaining->setRegisterTime($registerDateTime);
         return $remaining;
+    }
+
+
+    /** @inheritDoc */
+    public function findOccurrences(Medicine $medicine, Storage $storage): array
+    {
+        $medicineStorageQuery = "SELECT medicine_id, storage_id, remaining FROM %s WHERE medicine_id = :medicine_id AND storage_id = :storage_id;";
+        $medicineStorageResults = $this->pdo->prepare(
+            sprintf(
+                $medicineStorageQuery,
+                MedicineStorage::TABLE_NAME
+            )
+        );
+        $medicineStorageResults->setFetchMode(PDO::FETCH_CLASS, MedicineStorage::class);
+        $medicineStorageResults->execute([
+            ':medicine_id' => $medicine->getId(),
+            ':storage_id' => $storage->getId()
+        ]);
+        $medicineStorageOccurrences = [];
+        while ($row = $medicineStorageResults->fetch()) {
+            $medicineStorageOccurrences[] = $row;
+        }
+        return $medicineStorageOccurrences;
     }
 }

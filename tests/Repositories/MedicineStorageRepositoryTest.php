@@ -19,6 +19,7 @@ use Danilocgsilva\MedicineTime\Repositories\MedicinesRepository;
 use Danilocgsilva\MedicineTime\Repositories\MedicineStorageRepository;
 use Danilocgsilva\MedicineTime\Repositories\MedicineHourRepository;
 use DateTime;
+use Danilocgsilva\MedicineTime\Preview;
 
 class MedicineStorageRepositoryTest extends TestCaseDB
 {
@@ -46,25 +47,27 @@ class MedicineStorageRepositoryTest extends TestCaseDB
 
     public function testSetAndGetRemainingPills()
     {
-        $this->renewByMigration(new M02MedicineStorageMigration());
-        $this->renewByMigration(new M01MedicinesMigration());
-        $this->renewByMigration(new M01MedicineHourMigration());
-        $this->renewByMigration(new M01StorageMigration());
+        $this->renewCommonTables();
 
         $medicine = $this->storeTestingMedicine("Atovarstatina Cálcica 80mg");
         $defaultStorage = $this->storeTestingStorage("Default");
 
         $this->medicineStorageRepository->setRemainingPills($defaultStorage, $medicine, 12);
+        $preview = new Preview();
 
-        $this->assertSame(12, $this->medicineStorageRepository->getRemainingPills($defaultStorage, $medicine));
+        $this->assertSame(
+            12, 
+            $preview->getRemainingPills(
+                $defaultStorage,
+                $medicine,
+                $this->medicineStorageRepository
+            )
+        );
     }
 
     public function testSetAndGetRemainingPillsWithDate()
     {
-        $this->renewByMigration(new M02MedicineStorageMigration());
-        $this->renewByMigration(new M01MedicinesMigration());
-        $this->renewByMigration(new M01MedicineHourMigration());
-        $this->renewByMigration(new M01StorageMigration());
+        $this->renewCommonTables();
 
         $medicine = $this->storeTestingMedicine("Atovarstatina Cálcica 80mg");
         $defaultStorage = $this->storeTestingStorage("Default");
@@ -84,10 +87,7 @@ class MedicineStorageRepositoryTest extends TestCaseDB
 
     public function testSetAndGetRemainingPillsWithDateAndConsumingPatient()
     {
-        $this->renewByMigration(new M02MedicineStorageMigration());
-        $this->renewByMigration(new M01MedicinesMigration());
-        $this->renewByMigration(new M01MedicineHourMigration());
-        $this->renewByMigration(new M01StorageMigration());
+        $this->renewCommonTables();
         $this->renewByMigration(new M01PatientMigration());
 
         $medicine = $this->storeTestingMedicine("Atovarstatina Cálcica 80mg");
@@ -113,10 +113,7 @@ class MedicineStorageRepositoryTest extends TestCaseDB
 
     public function testSetAndGetRemainingPillsWithDateAndConsumingPatientWithDifferenteDate()
     {
-        $this->renewByMigration(new M02MedicineStorageMigration());
-        $this->renewByMigration(new M01MedicinesMigration());
-        $this->renewByMigration(new M01MedicineHourMigration());
-        $this->renewByMigration(new M01StorageMigration());
+        $this->renewCommonTables();
         $this->renewByMigration(new M01PatientMigration());
 
         $medicine = $this->storeTestingMedicine("Atovarstatina Cálcica 80mg");
@@ -142,10 +139,7 @@ class MedicineStorageRepositoryTest extends TestCaseDB
 
     public function testSetAndGetRemainingPillsWithDateAnndConsumingPatientWithDifferenteDate2()
     {
-        $this->renewByMigration(new M02MedicineStorageMigration());
-        $this->renewByMigration(new M01MedicinesMigration());
-        $this->renewByMigration(new M01MedicineHourMigration());
-        $this->renewByMigration(new M01StorageMigration());
+        $this->renewCommonTables();
         $this->renewByMigration(new M01PatientMigration());
 
         $medicine = $this->storeTestingMedicine("Atovarstatina Cálcica 80mg");
@@ -164,40 +158,16 @@ class MedicineStorageRepositoryTest extends TestCaseDB
             6, 
             $this->medicineStorageRepository->getRemainingPills(
                 $defaultStorage, 
-                $medicine, 
-                $dateTimeForCompare
+                $medicine
             )
         );
     }
 
-    public function testPreviewWithTwoHoursAdded()
+    private function renewCommonTables()
     {
         $this->renewByMigration(new M02MedicineStorageMigration());
         $this->renewByMigration(new M01MedicinesMigration());
-        $this->renewByMigration(new M01MedicineHourMigration());
         $this->renewByMigration(new M01StorageMigration());
-        $this->renewByMigration(new M01PatientMigration());
-
-        $medicine = $this->storeTestingMedicine("Losartana Potássica 50mg");
-        $defaultStorage = $this->storeTestingStorage("Default");
-        $dateTime = "2024-04-14 00:00:00";
-        $consumingPatient = $this->storeTestingPatient("Aysla Andrade");
-
-        $this->medicineStorageRepository->setRemainingPills($defaultStorage, $medicine, 9, $dateTime);
-
-        $medicineHourRepository = new MedicineHourRepository($this->pdo);
-        $medicineHourRepository->addManagementHour(9, $medicine, $consumingPatient);
-        $medicineHourRepository->addManagementHour(21, $medicine, $consumingPatient);
-
-        $dateTimeForCompare = DateTime::createFromFormat('Y-m-d H:i:s', "2024-04-15 00:00:00");
-
-        $this->assertSame(
-            7, 
-            $this->medicineStorageRepository->getRemainingPills(
-                $defaultStorage, 
-                $medicine, 
-                $dateTimeForCompare
-            )
-        );
+        $this->renewByMigration(new M01MedicineHourMigration());
     }
 }

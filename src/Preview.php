@@ -6,6 +6,8 @@ namespace Danilocgsilva\MedicineTime;
 
 use Danilocgsilva\MedicineTime\Entities\Medicine;
 use Danilocgsilva\MedicineTime\Repositories\MedicineHourRepository;
+use Danilocgsilva\MedicineTime\Entities\Storage;
+use Danilocgsilva\MedicineTime\Repositories\MedicineStorageRepository;
 use DateTime;
 use Exception;
 
@@ -44,13 +46,37 @@ class Preview
         if ($firstHour > (int) $start->format("H")) {
             $countConsumed++;
         }
+
+        $lastHour = $firstHour;
+        if (count($occurrences) === 1) {
+            if ($lastHour > (int) $end->format("H")) {
+                $countConsumed--;
+                return $countConsumed;
+            }
+        }
         
-        // $interval = date_diff($end, $start);
-        // $containingDaysInInterval = (int) $interval->format('%a') + 1;
-
-        // $countConsumed += count($occurrences) * $containingDaysInInterval;
-        // return $countConsumed;
-
         return $countConsumed;
+    }
+
+    /**
+     * Get remaining pills from storage
+     *
+     * @param Storage $storage
+     * @param Medicine $medicine
+     * @param MedicineStorageRepository $medicineStorageRepository
+     * 
+     * @param DateTime $dateTime
+     * @return integer
+     */
+    public function getRemainingPills(
+        Storage $storage, 
+        Medicine $medicine,
+        MedicineStorageRepository $medicineStorageRepository,
+        DateTime $dateTime = new DateTime()
+    ): int
+    {
+        $occurrences = $medicineStorageRepository->findOccurrences($medicine, $storage);
+
+        return $occurrences[0]->remaining;
     }
 }

@@ -10,7 +10,6 @@ use PDO;
 
 class StorageRepository extends AbstractRepository implements StorageRepositoryInterface
 {
-    
     /** @inheritDoc */
     public function list(): array
     {
