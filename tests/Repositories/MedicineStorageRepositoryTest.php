@@ -75,12 +75,14 @@ class MedicineStorageRepositoryTest extends TestCaseDB
 
         $this->medicineStorageRepository->setRemainingPills($defaultStorage, $medicine, 12, $dateTime);
 
+        $preview = new Preview();
+
         $this->assertSame(
-            12, 
-            $this->medicineStorageRepository->getRemainingPills(
-                $defaultStorage, 
+            12,
+            $preview->getRemainingPills(
+                $defaultStorage,
                 $medicine,
-                DateTime::createFromFormat('Y-m-d H:i:s', $dateTime)
+                $this->medicineStorageRepository
             )
         );
     }
@@ -101,11 +103,14 @@ class MedicineStorageRepositoryTest extends TestCaseDB
 
         $medicineHourRepository->addManagementHour(9, $medicine, $consumingPatient);
 
+        $preview = new Preview();
+
         $this->assertSame(
-            7, 
-            $this->medicineStorageRepository->getRemainingPills(
-                $defaultStorage, 
+            7,
+            $preview->getRemainingPills(
+                $defaultStorage,
                 $medicine,
+                $this->medicineStorageRepository,
                 DateTime::createFromFormat('Y-m-d H:i:s', $dateTime)
             )
         );
@@ -123,15 +128,17 @@ class MedicineStorageRepositoryTest extends TestCaseDB
 
         $this->medicineStorageRepository->setRemainingPills($defaultStorage, $medicine, 7, $dateTime);
 
-        $medicineHourRepository = new MedicineHourRepository($this->pdo);
+        (new MedicineHourRepository($this->pdo))
+            ->addManagementHour(9, $medicine, $consumingPatient);
 
-        $medicineHourRepository->addManagementHour(9, $medicine, $consumingPatient);
+        $preview = new Preview();
 
         $this->assertSame(
-            5, 
-            $this->medicineStorageRepository->getRemainingPills(
-                $defaultStorage, 
-                $medicine, 
+            5,
+            $preview->getRemainingPills(
+                $defaultStorage,
+                $medicine,
+                $this->medicineStorageRepository,
                 DateTime::createFromFormat('Y-m-d H:i:s', "2024-04-17 00:00:00")
             )
         );
