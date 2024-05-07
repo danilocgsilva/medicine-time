@@ -34,4 +34,16 @@ class MedicineStorage extends EntityAbstract
     {
         return $this->register_time;
     }
+
+    public function setMedicineId(int $id): self
+    {
+        $this->medicine_id = $id;
+        return $this;
+    }
+
+    public function setStorageId(int $id): self
+    {
+        $this->storage_id = $id;
+        return $this;
+    }
 }

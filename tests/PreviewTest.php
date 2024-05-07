@@ -20,6 +20,7 @@ use Danilocgsilva\MedicineTime\Repositories\MedicineHourRepository;
 use Danilocgsilva\MedicineTime\Tests\Commons\PatientTrait;
 use Danilocgsilva\MedicineTime\Repositories\PatientRepository;
 use Danilocgsilva\MedicineTime\Entities\Patient;
+use Danilocgsilva\MedicineTime\Repositories\MedicineStorageRepository;
 
 class PreviewTest extends TestCaseDB
 {
@@ -29,7 +30,10 @@ class PreviewTest extends TestCaseDB
     {
         $medicine = $this->createMedicineInDatabase("Cilostazol 100mg");
         $storage = $this->createStorageInDatabase();
+        $patient = $this->createPatientInDatabase("Helena Dias");
+
         $preview = new Preview();
+        $remainingInDays = $preview->remainingInDays([$storage], $medicine, [$patient]);
 
         $this->assertSame(0, 1);
     }
@@ -42,7 +46,7 @@ class PreviewTest extends TestCaseDB
         $medicineHourRepository = new MedicineHourRepository($this->pdo);
 
         $medicine = $this->createMedicineInDatabase("Cilostazol 100mg");
-        $patient = $this->createPatientInDatabase();
+        $patient = $this->createPatientInDatabase("Emerson Leão");
 
         $medicineHourRepository->addManagementHour(9, $medicine, $patient);
 
@@ -64,7 +68,7 @@ class PreviewTest extends TestCaseDB
         $medicineHourRepository = new MedicineHourRepository($this->pdo);
 
         $medicine = $this->createMedicineInDatabase("Cilostazol 100mg");
-        $patient = $this->createPatientInDatabase();
+        $patient = $this->createPatientInDatabase("Thiago Martins");
 
         $medicineHourRepository->addManagementHour(9, $medicine, $patient);
 
@@ -100,9 +104,9 @@ class PreviewTest extends TestCaseDB
         return $storageRepository->list()[0];
     }
 
-    private function createPatientInDatabase(): Patient
+    private function createPatientInDatabase(string $patientName): Patient
     {
-        $patient = $this->createTestingPatient("Helena Dias");
+        $patient = $this->createTestingPatient($patientName);
         $patientRepository = new PatientRepository($this->pdo);
         $patientRepository->save($patient);
         return $patientRepository->list()[0];

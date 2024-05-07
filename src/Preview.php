@@ -64,6 +64,8 @@ class Preview
      * @param Storage $storage
      * @param Medicine $medicine
      * @param MedicineStorageRepository $medicineStorageRepository
+     * @param MedicineHourRepository $medicineHourRepository,
+     * @param DateTime $dateTime = new DateTime()
      * 
      * @param DateTime $dateTime
      * @return integer
@@ -72,11 +74,16 @@ class Preview
         Storage $storage, 
         Medicine $medicine,
         MedicineStorageRepository $medicineStorageRepository,
+        MedicineHourRepository $medicineHourRepository,
         DateTime $dateTime = new DateTime()
     ): int
     {
         $occurrences = $medicineStorageRepository->findOccurrences($medicine, $storage);
+        $interval = $occurrences[0]->register_time->diff($dateTime);
+        $intervalDays = $interval->format('%a');
 
-        return $occurrences[0]->remaining;
+        $occurrencesManagementHours = $medicineHourRepository->getManagementHours($medicine);
+
+        return $occurrences[0]->remaining - ($intervalDays * count($occurrencesManagementHours));
     }
 }

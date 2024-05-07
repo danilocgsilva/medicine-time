@@ -61,22 +61,33 @@ class MedicineStorageRepository extends AbstractRepository implements MedicineSt
     /** @inheritDoc */
     public function findOccurrences(Medicine $medicine, Storage $storage): array
     {
-        $medicineStorageQuery = "SELECT medicine_id, storage_id, remaining FROM %s WHERE medicine_id = :medicine_id AND storage_id = :storage_id;";
+        $medicineStorageQuery = "SELECT medicine_id, storage_id, remaining, register_time FROM %s WHERE medicine_id = :medicine_id AND storage_id = :storage_id;";
         $medicineStorageResults = $this->pdo->prepare(
             sprintf(
                 $medicineStorageQuery,
                 MedicineStorage::TABLE_NAME
             )
         );
-        $medicineStorageResults->setFetchMode(PDO::FETCH_CLASS, MedicineStorage::class);
+        $medicineStorageResults->setFetchMode(PDO::FETCH_ASSOC);
         $medicineStorageResults->execute([
             ':medicine_id' => $medicine->getId(),
             ':storage_id' => $storage->getId()
         ]);
         $medicineStorageOccurrences = [];
         while ($row = $medicineStorageResults->fetch()) {
-            $medicineStorageOccurrences[] = $row;
+            $medicineStorageOccurrences[] = $this->buildMedicineStorageFromRow($row);
         }
         return $medicineStorageOccurrences;
+    }
+
+    private function buildMedicineStorageFromRow(array $row): MedicineStorage
+    {
+        return (new MedicineStorage())
+            ->setMedicineId((int) $row["medicine_id"])
+            ->setStorageId((int) $row["storage_id"])
+            ->setRemaining((int) $row["remaining"])
+            ->setRegisterTime(
+                DateTime::createFromFormat("Y-m-d H:i:s", $row["register_time"])
+            );
     }
 }

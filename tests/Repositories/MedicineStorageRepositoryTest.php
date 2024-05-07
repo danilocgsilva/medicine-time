@@ -60,7 +60,8 @@ class MedicineStorageRepositoryTest extends TestCaseDB
             $preview->getRemainingPills(
                 $defaultStorage,
                 $medicine,
-                $this->medicineStorageRepository
+                $this->medicineStorageRepository,
+                new MedicineHourRepository($this->pdo)
             )
         );
     }
@@ -82,7 +83,9 @@ class MedicineStorageRepositoryTest extends TestCaseDB
             $preview->getRemainingPills(
                 $defaultStorage,
                 $medicine,
-                $this->medicineStorageRepository
+                $this->medicineStorageRepository,
+                new MedicineHourRepository($this->pdo),
+                DateTime::createFromFormat("Y-m-d H:i:s", $dateTime)
             )
         );
     }
@@ -111,6 +114,7 @@ class MedicineStorageRepositoryTest extends TestCaseDB
                 $defaultStorage,
                 $medicine,
                 $this->medicineStorageRepository,
+                $medicineHourRepository,
                 DateTime::createFromFormat('Y-m-d H:i:s', $dateTime)
             )
         );
@@ -128,8 +132,8 @@ class MedicineStorageRepositoryTest extends TestCaseDB
 
         $this->medicineStorageRepository->setRemainingPills($defaultStorage, $medicine, 7, $dateTime);
 
-        (new MedicineHourRepository($this->pdo))
-            ->addManagementHour(9, $medicine, $consumingPatient);
+        $medicineHourRepository = new MedicineHourRepository($this->pdo);
+        $medicineHourRepository->addManagementHour(9, $medicine, $consumingPatient);
 
         $preview = new Preview();
 
@@ -139,6 +143,7 @@ class MedicineStorageRepositoryTest extends TestCaseDB
                 $defaultStorage,
                 $medicine,
                 $this->medicineStorageRepository,
+                $medicineHourRepository,
                 DateTime::createFromFormat('Y-m-d H:i:s', "2024-04-17 00:00:00")
             )
         );
@@ -161,11 +166,41 @@ class MedicineStorageRepositoryTest extends TestCaseDB
 
         $dateTimeForCompare = DateTime::createFromFormat('Y-m-d H:i:s', "2024-04-17 00:00:00");
 
+        $preview = new Preview();
+
         $this->assertSame(
             6, 
-            $this->medicineStorageRepository->getRemainingPills(
+            $preview->getRemainingPills(
                 $defaultStorage, 
-                $medicine
+                $medicine,
+                $this->medicineStorageRepository,
+                $medicineHourRepository,
+                $dateTimeForCompare
+            )
+        );
+    }
+
+    public function testRemainingPillsWithoutConsumingRegisters(): void
+    {
+        $this->renewCommonTables();
+        $this->renewByMigration(new M01PatientMigration());
+
+        $defaultStorage = $this->storeTestingStorage("Default");
+        $medicine = $this->storeTestingMedicine("Atovarstatina Cálcica 80mg");
+        $dateTime = "2024-04-14 00:00:00";
+
+        $this->medicineStorageRepository->setRemainingPills($defaultStorage, $medicine, 20, $dateTime);
+
+        $dateTimeForCompare = DateTime::createFromFormat('Y-m-d H:i:s', "2024-04-17 00:00:00");
+        $preview = new Preview();
+        $this->assertSame(
+            20, 
+            $preview->getRemainingPills(
+                $defaultStorage, 
+                $medicine,
+                $this->medicineStorageRepository,
+                new MedicineHourRepository($this->pdo),
+                $dateTimeForCompare
             )
         );
     }
