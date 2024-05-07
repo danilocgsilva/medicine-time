@@ -45,19 +45,6 @@ class MedicineStorageRepository extends AbstractRepository implements MedicineSt
         $preResult->execute($baseExecuteParameters);
     }
 
-    private function generateMedicineStorageFromFields(array $row): MedicineStorage
-    {
-        $remaining = new MedicineStorage();
-        $remaining->setRemaining((int) $row['remaining']);
-        $registerDateTime = DateTime::createFromFormat(
-            'Y-m-d H:i:s',
-            $row['register_time']
-        );
-        $remaining->setRegisterTime($registerDateTime);
-        return $remaining;
-    }
-
-
     /** @inheritDoc */
     public function findOccurrences(Medicine $medicine, Storage $storage): array
     {
@@ -89,5 +76,17 @@ class MedicineStorageRepository extends AbstractRepository implements MedicineSt
             ->setRegisterTime(
                 DateTime::createFromFormat("Y-m-d H:i:s", $row["register_time"])
             );
+    }
+
+    private function generateMedicineStorageFromFields(array $row): MedicineStorage
+    {
+        $remaining = new MedicineStorage();
+        $remaining->setRemaining((int) $row['remaining']);
+        $registerDateTime = DateTime::createFromFormat(
+            'Y-m-d H:i:s',
+            $row['register_time']
+        );
+        $remaining->setRegisterTime($registerDateTime);
+        return $remaining;
     }
 }

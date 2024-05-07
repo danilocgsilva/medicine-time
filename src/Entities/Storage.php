@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Danilocgsilva\MedicineTime\Entities;
 
+use Danilocgsilva\MedicineTime\Repositories\MedicineStorageRepository;
+
 class Storage extends EntityAbstract
 {
     public const TABLE_NAME = "storage";
@@ -27,7 +29,16 @@ class Storage extends EntityAbstract
         return $this->id;
     }
 
-    public function remainignPills(): int
+    public function setMedicines(
+        Medicine $medicine, 
+        int $amount, 
+        MedicineStorageRepository $medicineStorageRepository
+    ): void
+    {
+        $medicineStorageRepository->setRemainingPills($this, $medicine, $amount);
+    }
+
+    public function remainignPills(Medicine $medicine, MedicineStorageRepository $medicineStorageRepository): int
     {
 
     }
