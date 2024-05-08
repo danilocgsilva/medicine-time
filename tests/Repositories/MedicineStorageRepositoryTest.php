@@ -91,7 +91,7 @@ class MedicineStorageRepositoryTest extends TestCaseDB
     public function testSetAndGetRemainingPillsWithDateAndConsumingPatient()
     {
         $this->renewCommonTables();
-        $this->renewByMigration(new M01PatientMigration());
+        $this->renewByMigration(new M01PatientMigration(), $this->dbEngine);
 
         $medicine = $this->storeTestingMedicine("Atovarstatina Cálcica 80mg");
         $defaultStorage = $this->storeTestingStorage("Default");
@@ -120,7 +120,7 @@ class MedicineStorageRepositoryTest extends TestCaseDB
     public function testSetAndGetRemainingPillsWithDateAndConsumingPatientWithDifferenteDate()
     {
         $this->renewCommonTables();
-        $this->renewByMigration(new M01PatientMigration());
+        $this->renewByMigration(new M01PatientMigration(), $this->dbEngine);
 
         $medicine = $this->storeTestingMedicine("Atovarstatina Cálcica 80mg");
         $defaultStorage = $this->storeTestingStorage("Default");
@@ -148,7 +148,7 @@ class MedicineStorageRepositoryTest extends TestCaseDB
     public function testSetAndGetRemainingPillsWithDateAnndConsumingPatientWithDifferenteDate2()
     {
         $this->renewCommonTables();
-        $this->renewByMigration(new M01PatientMigration());
+        $this->renewByMigration(new M01PatientMigration(), $this->dbEngine);
 
         $medicine = $this->storeTestingMedicine("Atovarstatina Cálcica 80mg");
         $defaultStorage = $this->storeTestingStorage("Default");
@@ -178,7 +178,7 @@ class MedicineStorageRepositoryTest extends TestCaseDB
     public function testRemainingPillsWithoutConsumingRegisters(): void
     {
         $this->renewCommonTables();
-        $this->renewByMigration(new M01PatientMigration());
+        $this->renewByMigration(new M01PatientMigration(), $this->dbEngine);
 
         $defaultStorage = $this->storeTestingStorage("Default");
         $medicine = $this->storeTestingMedicine("Atovarstatina Cálcica 80mg");
@@ -201,9 +201,9 @@ class MedicineStorageRepositoryTest extends TestCaseDB
 
     private function renewCommonTables()
     {
-        $this->renewByMigration(new M02MedicineStorageMigration());
-        $this->renewByMigration(new M01MedicinesMigration());
-        $this->renewByMigration(new M01StorageMigration());
-        $this->renewByMigration(new M01MedicineHourMigration());
+        $this->renewByMigration(new M02MedicineStorageMigration(), $this->dbEngine);
+        $this->renewByMigration(new M01MedicinesMigration(), $this->dbEngine);
+        $this->renewByMigration(new M01StorageMigration(), $this->dbEngine);
+        $this->renewByMigration(new M01MedicineHourMigration(), $this->dbEngine);
     }
 }

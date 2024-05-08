@@ -30,7 +30,7 @@ class PreviewTest extends TestCaseDB
     public function testRemainingInDays()
     {
         $this->renewMigrations();
-        $this->renewByMigration(new M02MedicineStorageMigration());
+        $this->renewByMigration(new M02MedicineStorageMigration(), $this->dbEngine);
 
         $medicine = $this->createMedicineInDatabase("Cilostazol 100mg");
         $storage = $this->createStorageInDatabase();
@@ -52,7 +52,7 @@ class PreviewTest extends TestCaseDB
     public function testRemainingInDaysWithPatientConsuming()
     {
         $this->renewMigrations();
-        $this->renewByMigration(new M02MedicineStorageMigration());
+        $this->renewByMigration(new M02MedicineStorageMigration(), $this->dbEngine);
 
         $medicine = $this->createMedicineInDatabase("Cilostazol 100mg");
         $storage = $this->createStorageInDatabase();
@@ -150,10 +150,10 @@ class PreviewTest extends TestCaseDB
 
     private function renewMigrations()
     {
-        $this->renewByMigration(new M01MedicinesMigration());
-        $this->renewByMigration(new M01StorageMigration());
-        $this->renewByMigration(new M01PatientMigration());
-        $this->renewByMigration(new M01MedicineHourMigration());
+        $this->renewByMigration(new M01MedicinesMigration(), $this->dbEngine);
+        $this->renewByMigration(new M01StorageMigration(), $this->dbEngine);
+        $this->renewByMigration(new M01PatientMigration(), $this->dbEngine);
+        $this->renewByMigration(new M01MedicineHourMigration(), $this->dbEngine);
     }
 }
 

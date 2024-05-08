@@ -35,8 +35,8 @@ class MedicineHourRepositoryTest extends TestCaseDB
     
     public function testSaveAndGet(): void
     {
-        $this->renewByMigration(new M01MedicinesMigration());
-        $this->renewByMigration(new M01MedicineHourMigration());
+        $this->renewByMigration(new M01MedicinesMigration(), $this->dbEngine);
+        $this->renewByMigration(new M01MedicineHourMigration(), $this->dbEngine);
         
         $medicine = $this->createTestingMedicine("Alopurinol 40mg");
         $this->medicinesRepository->save($medicine);

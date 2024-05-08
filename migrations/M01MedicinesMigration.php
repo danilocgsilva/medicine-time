@@ -9,7 +9,7 @@ use Danilocgsilva\MedicineTime\Entities\Medicine;
 class M01MedicinesMigration implements MigrationInterface
 {
     /** @inheritDoc */
-    public function getUpString(): string
+    public function getUpString(string $engine): string
     {
         $upString = <<<EOT
 CREATE TABLE `%s` (

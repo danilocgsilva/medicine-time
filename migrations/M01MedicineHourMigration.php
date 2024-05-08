@@ -11,7 +11,7 @@ use Danilocgsilva\MedicineTime\Entities\MedicineHour;
 class M01MedicineHourMigration implements MigrationInterface
 {
     /** @inheritDoc */
-    public function getUpString(): string
+    public function getUpString(string $engine): string
     {
         $upString = <<<EOT
 CREATE TABLE `%s` (
@@ -20,15 +20,16 @@ CREATE TABLE `%s` (
     `medicine_id` INT UNSIGNED NOT NULL,
     `patient_id` INT UNSIGNED NOT NULL,
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=%s CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 ALTER TABLE `%s` ADD CONSTRAINT `medicine_medicine_hour` FOREIGN KEY (`medicine_id`) REFERENCES `%s` (`id`);
 
 ALTER TABLE `%s` ADD CONSTRAINT `medicine_hour_patient` FOREIGN KEY (`patient_id`) REFERENCES `%s` (`id`);
 EOT;
         $migrationString = sprintf(
-            $upString, 
+            $upString,
             MedicineHour::TABLE_NAME, 
+            $engine,
             MedicineHour::TABLE_NAME,
             Medicine::TABLE_NAME,
             MedicineHour::TABLE_NAME,

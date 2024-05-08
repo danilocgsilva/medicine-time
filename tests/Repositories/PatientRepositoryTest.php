@@ -27,7 +27,7 @@ class PatientRepositoryTest extends TestCaseDB
     
     public function testSaveAndRecover()
     {
-        $this->renewByMigration(new M01PatientMigration());
+        $this->renewByMigration(new M01PatientMigration(), $this->dbEngine);
         
         $patient = $this->createTestingPatient("John Doe");
         $this->patientRepository->save($patient);
@@ -38,8 +38,8 @@ class PatientRepositoryTest extends TestCaseDB
 
     public function testRecoverWithMedicine()
     {
-        $this->renewByMigration(new M01PatientMigration());
-        $this->renewByMigration(new M01MedicinesMigration());
+        $this->renewByMigration(new M01PatientMigration(), $this->dbEngine);
+        $this->renewByMigration(new M01MedicinesMigration(), $this->dbEngine);
 
         $patient = $this->createTestingPatient("Evelyn Martins");
         $patient->setId(1);
@@ -57,8 +57,8 @@ class PatientRepositoryTest extends TestCaseDB
 
     public function testHasMedicineAssigmentFalse()
     {
-        $this->renewByMigration(new M01PatientMigration());
-        $this->renewByMigration(new M01MedicineHourMigration());
+        $this->renewByMigration(new M01PatientMigration(), $this->dbEngine);
+        $this->renewByMigration(new M01MedicineHourMigration(), $this->dbEngine);
 
         $patient = $this->createTestingPatient("Evelyn Martins");
         $this->patientRepository->save($patient);
@@ -70,8 +70,8 @@ class PatientRepositoryTest extends TestCaseDB
 
     public function testHasMedicineAssigmentTrue()
     {
-        $this->renewByMigration(new M01PatientMigration());
-        $this->renewByMigration(new M01MedicineHourMigration());
+        $this->renewByMigration(new M01PatientMigration(), $this->dbEngine);
+        $this->renewByMigration(new M01MedicineHourMigration(), $this->dbEngine);
 
         $patient = $this->createTestingPatient("Evelyn Martins");
         $medicine = $this->createTestingMedicine("Cilostazol 100mg");

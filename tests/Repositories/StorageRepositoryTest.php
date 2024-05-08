@@ -24,7 +24,7 @@ class StorageRepositoryTest extends TestCaseDB
     
     public function testSaveAndRecover()
     {
-        $this->renewByMigration(new M01StorageMigration());
+        $this->renewByMigration(new M01StorageMigration(), $this->dbEngine);
         $this->storeTestingStorage("default");
         $listing = $this->storageRepository->list();
         $this->assertCount(1, $listing);

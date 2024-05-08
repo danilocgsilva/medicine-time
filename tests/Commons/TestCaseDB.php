@@ -12,8 +12,11 @@ class TestCaseDB extends TestCase
 {
     protected PDO $pdo;
 
+    protected string $dbEngine;
+
     public function setUp(): void
     {
+        $this->dbEngine = "MEMORY";
         $dsn = sprintf('mysql:host=%s;dbname=%s', getenv('MEDICINE_TIME_DB_HOST'), getenv('MEDICINE_TIME_DB_NAME'));
         $this->pdo = new PDO($dsn, getenv('MEDICINE_TIME_DB_USERNAME'), getenv('MEDICINE_TIME_DB_PASSWORD'));
     }
@@ -24,14 +27,14 @@ class TestCaseDB extends TestCase
      * @param \Danilocgsilva\MedicineTime\Migrations\MigrationInterface $entityMigration
      * @return void
      */
-    protected function renewByMigration(MigrationInterface $entityMigration): void
+    protected function renewByMigration(MigrationInterface $entityMigration, string $engine): void
     {
         $renewQuery = sprintf("USE %s;", getenv('MEDICINE_TIME_DB_NAME'));
         $renewQuery .= "\n" . "SET FOREIGN_KEY_CHECKS=0;";
         if ($this->tableExists($entityMigration->getTableName())) {
             $renewQuery .= "\n" . $entityMigration->getDownString();
         }
-        $renewQuery .= "\n" . $entityMigration->getUpString();
+        $renewQuery .= "\n" . $entityMigration->getUpString($engine);
         $renewQuery .= "\n" . "SET FOREIGN_KEY_CHECKS=1;";
 
         $preResult = $this->pdo->prepare($renewQuery);

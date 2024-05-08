@@ -20,7 +20,7 @@ class StorageTest extends TestCaseDB
 
     public function testAssertId1()
     {
-        $this->renewByMigration(new M01StorageMigration());
+        $this->renewByMigration(new M01StorageMigration(), $this->dbEngine);
         $storage = $this->createTestingStorage("default");
         $storageRepository = new StorageRepository($this->pdo);
         $storageRepository->save($storage);

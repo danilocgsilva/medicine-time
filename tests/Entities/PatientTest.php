@@ -28,8 +28,8 @@ class PatientTest extends TestCaseDB
 
     public function testAssertId1()
     {
-        $this->renewByMigration(new M01PatientMigration());
-        $this->renewByMigration(new M01MedicineHourMigration());
+        $this->renewByMigration(new M01PatientMigration(), $this->dbEngine);
+        $this->renewByMigration(new M01MedicineHourMigration(), $this->dbEngine);
 
         $patient = $this->storeTestingPatient("John Mike");
 
@@ -40,11 +40,11 @@ class PatientTest extends TestCaseDB
 
     public function testAssignMedicine()
     {
-        $this->renewByMigration(new M01PatientMigration());
+        $this->renewByMigration(new M01PatientMigration(), $this->dbEngine);
         
         $patient = $this->createTestingPatient("John Mike");
 
-        $this->renewByMigration(new M01MedicinesMigration());
+        $this->renewByMigration(new M01MedicinesMigration(), $this->dbEngine);
         $medicine = $this->createTestingMedicine("Cilostazol 100mg");
 
         $patient->assignMedicine($medicine);

@@ -13,7 +13,7 @@ interface MigrationInterface
      *
      * @return string
      */
-    public function getUpString(): string;
+    public function getUpString(string $engine): string;
 
     /**
      * Get down/revert string query into application

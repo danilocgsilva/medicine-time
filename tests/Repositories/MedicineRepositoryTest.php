@@ -24,7 +24,7 @@ class MedicineRepositoryTest extends TestCaseDB
     
     public function testSaveAndRecover()
     {
-        $this->renewByMigration(new M01MedicinesMigration());
+        $this->renewByMigration(new M01MedicinesMigration(), $this->dbEngine);
         $this->storeTestingMedicine("Cilostazol 100mg");
         $listing = $this->medicinesRepository->list();
         $this->assertCount(1, $listing);
@@ -32,7 +32,7 @@ class MedicineRepositoryTest extends TestCaseDB
 
     public function testFindManyByIdsOneMedicine()
     {
-        $this->renewByMigration(new M01MedicinesMigration());
+        $this->renewByMigration(new M01MedicinesMigration(), $this->dbEngine);
         $medicine = $this->storeTestingMedicine("Cilostazol 100mg");
         $listing = $this->medicinesRepository->findManyByIds([$medicine->getId()]);
         $this->assertCount(1, $listing);
@@ -40,7 +40,7 @@ class MedicineRepositoryTest extends TestCaseDB
 
     public function testFindManyByIdsThreeMedicines()
     {
-        $this->renewByMigration(new M01MedicinesMigration());
+        $this->renewByMigration(new M01MedicinesMigration(), $this->dbEngine);
         $medicine1 = $this->storeTestingMedicine("Cilostazol 100mg");
         $medicine2 = $this->storeTestingMedicine("Levotiroxina Sódica (50mcg)");
         $listing = $this->medicinesRepository->findManyByIds([
@@ -53,7 +53,7 @@ class MedicineRepositoryTest extends TestCaseDB
 
     public function testFindByKey()
     {
-        $this->renewByMigration(new M01MedicinesMigration());
+        $this->renewByMigration(new M01MedicinesMigration(), $this->dbEngine);
         $this->storeTestingMedicine("Cilostazol 100mg");
         $recoveredMedicine = $this->medicinesRepository->findById(1);
         $this->assertSame(1, $recoveredMedicine->getId());

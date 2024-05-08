@@ -20,7 +20,7 @@ class MedicineTest extends TestCaseDB
     
     public function testAssertId1()
     {
-        $this->renewByMigration(new M01MedicinesMigration());
+        $this->renewByMigration(new M01MedicinesMigration(), $this->dbEngine);
         $medicine = $this->createTestingMedicine("Cilostazol 100mg");
         $medicinesRepository = new MedicinesRepository($this->pdo);
         $medicinesRepository->save($medicine);

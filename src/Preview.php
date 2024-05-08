@@ -31,7 +31,9 @@ class Preview
         /** @var \Danilocgsilva\MedicineTime\Entities\MedicineStorage[] */
         $medicineStorageOccurrences = $medicineStorageRepository->findOccurrences($medicine, $storages[0]);
 
-        return $medicineStorageOccurrences[0]->remaining;
+        $timeDifference = (int) $dateTime->diff($medicineStorageOccurrences[0]->register_time)->format("%d");
+
+        return $medicineStorageOccurrences[0]->remaining - ($timeDifference * count($medicineHoursOccurrences));
     }
 
     /**
