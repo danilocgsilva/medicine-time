@@ -21,14 +21,17 @@ class Preview
         array $storages, 
         Medicine $medicine, 
         array $patients, 
-        DateTime $dateTime = new DateTime(),
-        MedicineStorageRepository $medicineStorageRepository
+        MedicineStorageRepository $medicineStorageRepository,
+        DateTime $dateTime = new DateTime()
     ): int
     {
-        /** @var  */
+        /** @var \Danilocgsilva\MedicineTime\Entities\MedicineHour[] */
         $medicineHoursOccurrences = $this->medicineHourRepository->getManagementHours($medicine);
-        
-        return $medicineHoursOccurrences[0];
+
+        /** @var \Danilocgsilva\MedicineTime\Entities\MedicineStorage[] */
+        $medicineStorageOccurrences = $medicineStorageRepository->findOccurrences($medicine, $storages[0]);
+
+        return $medicineStorageOccurrences[0]->remaining;
     }
 
     /**

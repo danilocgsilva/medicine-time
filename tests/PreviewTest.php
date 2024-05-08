@@ -4,6 +4,7 @@ declare(strict_types= 1);
 
 namespace Danilocgsilva\MedicineTime\Tests;
 
+use Danilocgsilva\MedicineTime\Migrations\M02MedicineStorageMigration;
 use Danilocgsilva\MedicineTime\Tests\Commons\TestCaseDB;
 use Danilocgsilva\MedicineTime\Migrations\M01StorageMigration;
 use Danilocgsilva\MedicineTime\Migrations\M01MedicineHourMigration;
@@ -29,10 +30,10 @@ class PreviewTest extends TestCaseDB
     public function testRemainingInDays()
     {
         $this->renewMigrations();
+        $this->renewByMigration(new M02MedicineStorageMigration());
 
         $medicine = $this->createMedicineInDatabase("Cilostazol 100mg");
         $storage = $this->createStorageInDatabase();
-        $patient = $this->createPatientInDatabase("Helena Dias");
         $medicineStorageRepository = new MedicineStorageRepository($this->pdo);
         $medicineStorageRepository->setRemainingPills($storage, $medicine, 12, "2024-03-12 00:00:00");
 
@@ -40,12 +41,39 @@ class PreviewTest extends TestCaseDB
         $remainingInDays = $preview->remainingInDays(
             [$storage], 
             $medicine, 
-            [$patient], 
-            DateTime::createFromFormat("Y-m-d H:i:s", "2024-03-15 00:00:00"),
-            new MedicineStorageRepository($this->pdo)
+            [], 
+            new MedicineStorageRepository($this->pdo),
+            DateTime::createFromFormat("Y-m-d H:i:s", "2024-03-15 00:00:00")
         );
 
         $this->assertSame(12, $remainingInDays);
+    }
+
+    public function testRemainingInDaysWithPatientConsuming()
+    {
+        $this->renewMigrations();
+        $this->renewByMigration(new M02MedicineStorageMigration());
+
+        $medicine = $this->createMedicineInDatabase("Cilostazol 100mg");
+        $storage = $this->createStorageInDatabase();
+        $patient = $this->createPatientInDatabase("Helena Diaz");
+
+        $medicineStorageRepository = new MedicineStorageRepository($this->pdo);
+        $medicineStorageRepository->setRemainingPills($storage, $medicine, 12, "2024-03-12 00:00:00");
+
+        $medicineHourRepository = new MedicineHourRepository($this->pdo);
+        $medicineHourRepository->addManagementHour(9, $medicine, $patient);
+
+        $preview = new Preview(new MedicineHourRepository($this->pdo));
+        $remainingInDays = $preview->remainingInDays(
+            [$storage], 
+            $medicine, 
+            [], 
+            new MedicineStorageRepository($this->pdo),
+            DateTime::createFromFormat("Y-m-d H:i:s", "2024-03-15 00:00:00")
+        );
+
+        $this->assertSame(9, $remainingInDays);
     }
 
     public function testConsumingByPeriod(): void
