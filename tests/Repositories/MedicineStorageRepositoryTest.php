@@ -53,15 +53,14 @@ class MedicineStorageRepositoryTest extends TestCaseDB
         $defaultStorage = $this->storeTestingStorage("Default");
 
         $this->medicineStorageRepository->setRemainingPills($defaultStorage, $medicine, 12);
-        $preview = new Preview();
+        $preview = new Preview(new MedicineHourRepository($this->pdo));
 
         $this->assertSame(
             12, 
             $preview->getRemainingPills(
                 $defaultStorage,
                 $medicine,
-                $this->medicineStorageRepository,
-                new MedicineHourRepository($this->pdo)
+                $this->medicineStorageRepository
             )
         );
     }
@@ -76,7 +75,7 @@ class MedicineStorageRepositoryTest extends TestCaseDB
 
         $this->medicineStorageRepository->setRemainingPills($defaultStorage, $medicine, 12, $dateTime);
 
-        $preview = new Preview();
+        $preview = new Preview(new MedicineHourRepository($this->pdo));
 
         $this->assertSame(
             12,
@@ -84,7 +83,6 @@ class MedicineStorageRepositoryTest extends TestCaseDB
                 $defaultStorage,
                 $medicine,
                 $this->medicineStorageRepository,
-                new MedicineHourRepository($this->pdo),
                 DateTime::createFromFormat("Y-m-d H:i:s", $dateTime)
             )
         );
@@ -106,7 +104,7 @@ class MedicineStorageRepositoryTest extends TestCaseDB
 
         $medicineHourRepository->addManagementHour(9, $medicine, $consumingPatient);
 
-        $preview = new Preview();
+        $preview = new Preview($medicineHourRepository);
 
         $this->assertSame(
             7,
@@ -114,7 +112,6 @@ class MedicineStorageRepositoryTest extends TestCaseDB
                 $defaultStorage,
                 $medicine,
                 $this->medicineStorageRepository,
-                $medicineHourRepository,
                 DateTime::createFromFormat('Y-m-d H:i:s', $dateTime)
             )
         );
@@ -135,7 +132,7 @@ class MedicineStorageRepositoryTest extends TestCaseDB
         $medicineHourRepository = new MedicineHourRepository($this->pdo);
         $medicineHourRepository->addManagementHour(9, $medicine, $consumingPatient);
 
-        $preview = new Preview();
+        $preview = new Preview($medicineHourRepository);
 
         $this->assertSame(
             5,
@@ -143,7 +140,6 @@ class MedicineStorageRepositoryTest extends TestCaseDB
                 $defaultStorage,
                 $medicine,
                 $this->medicineStorageRepository,
-                $medicineHourRepository,
                 DateTime::createFromFormat('Y-m-d H:i:s', "2024-04-17 00:00:00")
             )
         );
@@ -166,7 +162,7 @@ class MedicineStorageRepositoryTest extends TestCaseDB
 
         $dateTimeForCompare = DateTime::createFromFormat('Y-m-d H:i:s', "2024-04-17 00:00:00");
 
-        $preview = new Preview();
+        $preview = new Preview($medicineHourRepository);
 
         $this->assertSame(
             6, 
@@ -174,7 +170,6 @@ class MedicineStorageRepositoryTest extends TestCaseDB
                 $defaultStorage, 
                 $medicine,
                 $this->medicineStorageRepository,
-                $medicineHourRepository,
                 $dateTimeForCompare
             )
         );
@@ -192,14 +187,13 @@ class MedicineStorageRepositoryTest extends TestCaseDB
         $this->medicineStorageRepository->setRemainingPills($defaultStorage, $medicine, 20, $dateTime);
 
         $dateTimeForCompare = DateTime::createFromFormat('Y-m-d H:i:s', "2024-04-17 00:00:00");
-        $preview = new Preview();
+        $preview = new Preview(new MedicineHourRepository($this->pdo));
         $this->assertSame(
             20, 
             $preview->getRemainingPills(
                 $defaultStorage, 
                 $medicine,
                 $this->medicineStorageRepository,
-                new MedicineHourRepository($this->pdo),
                 $dateTimeForCompare
             )
         );

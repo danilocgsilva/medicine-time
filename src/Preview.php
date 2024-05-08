@@ -13,9 +13,22 @@ use Exception;
 
 class Preview
 {
-    public function remainingInDays(array $storages, Medicine $medicine, array $patients): int
+    public function __construct(
+        private MedicineHourRepository $medicineHourRepository,
+    ) {}
+    
+    public function remainingInDays(
+        array $storages, 
+        Medicine $medicine, 
+        array $patients, 
+        DateTime $dateTime = new DateTime(),
+        MedicineStorageRepository $medicineStorageRepository
+    ): int
     {
-        return 0;
+        /** @var  */
+        $medicineHoursOccurrences = $this->medicineHourRepository->getManagementHours($medicine);
+        
+        return $medicineHoursOccurrences[0];
     }
 
     /**
@@ -24,14 +37,12 @@ class Preview
      * @param DateTime $start
      * @param DateTime $end
      * @param Medicine $medicine
-     * @param MedicineHourRepository $medicineHourRepository
      * @return int
      */
     public function consumingByPeriod(
         DateTime $start, 
         DateTime $end, 
-        Medicine $medicine, 
-        MedicineHourRepository $medicineHourRepository
+        Medicine $medicine
     ): int
     {
         if ($end < $start) {
@@ -40,7 +51,7 @@ class Preview
 
         $countConsumed = 0;
         /** @var \Danilocgsilva\MedicineTime\Entities\MedicineHour[] */
-        $occurrences = $medicineHourRepository->getManagementHours($medicine);
+        $occurrences = $this->medicineHourRepository->getManagementHours($medicine);
         $ocurrenceHour = $occurrences[0]->hour;
         $firstHour = (int) substr($ocurrenceHour, 0, 6);
         if ($firstHour > (int) $start->format("H")) {
@@ -74,7 +85,6 @@ class Preview
         Storage $storage, 
         Medicine $medicine,
         MedicineStorageRepository $medicineStorageRepository,
-        MedicineHourRepository $medicineHourRepository,
         DateTime $dateTime = new DateTime()
     ): int
     {
@@ -82,7 +92,7 @@ class Preview
         $interval = $occurrences[0]->register_time->diff($dateTime);
         $intervalDays = $interval->format('%a');
 
-        $occurrencesManagementHours = $medicineHourRepository->getManagementHours($medicine);
+        $occurrencesManagementHours = $this->medicineHourRepository->getManagementHours($medicine);
 
         return $occurrences[0]->remaining - ($intervalDays * count($occurrencesManagementHours));
     }

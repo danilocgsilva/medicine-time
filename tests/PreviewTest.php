@@ -28,21 +28,31 @@ class PreviewTest extends TestCaseDB
 
     public function testRemainingInDays()
     {
+        $this->renewMigrations();
+
         $medicine = $this->createMedicineInDatabase("Cilostazol 100mg");
         $storage = $this->createStorageInDatabase();
         $patient = $this->createPatientInDatabase("Helena Dias");
+        $medicineStorageRepository = new MedicineStorageRepository($this->pdo);
+        $medicineStorageRepository->setRemainingPills($storage, $medicine, 12, "2024-03-12 00:00:00");
 
-        $preview = new Preview();
-        $remainingInDays = $preview->remainingInDays([$storage], $medicine, [$patient]);
+        $preview = new Preview(new MedicineHourRepository($this->pdo));
+        $remainingInDays = $preview->remainingInDays(
+            [$storage], 
+            $medicine, 
+            [$patient], 
+            DateTime::createFromFormat("Y-m-d H:i:s", "2024-03-15 00:00:00"),
+            new MedicineStorageRepository($this->pdo)
+        );
 
-        $this->assertSame(0, 1);
+        $this->assertSame(12, $remainingInDays);
     }
 
     public function testConsumingByPeriod(): void
     {
         $this->renewMigrations();
         
-        $preview = new Preview();
+        $preview = new Preview(new MedicineHourRepository($this->pdo));
         $medicineHourRepository = new MedicineHourRepository($this->pdo);
 
         $medicine = $this->createMedicineInDatabase("Cilostazol 100mg");
@@ -53,8 +63,7 @@ class PreviewTest extends TestCaseDB
         $consumed = $preview->consumingByPeriod(
             DateTime::createFromFormat("Y-m-d H:i:s", "2024-04-01 00:00:00"),
             DateTime::createFromFormat("Y-m-d H:i:s", "2024-04-01 12:00:00"),
-            $medicine,
-            new MedicineHourRepository($this->pdo)
+            $medicine
         );
 
         $this->assertSame(1, $consumed);
@@ -64,7 +73,7 @@ class PreviewTest extends TestCaseDB
     {
         $this->renewMigrations();
         
-        $preview = new Preview();
+        $preview = new Preview(new MedicineHourRepository($this->pdo));
         $medicineHourRepository = new MedicineHourRepository($this->pdo);
 
         $medicine = $this->createMedicineInDatabase("Cilostazol 100mg");
@@ -75,8 +84,7 @@ class PreviewTest extends TestCaseDB
         $consumed = $preview->consumingByPeriod(
             DateTime::createFromFormat("Y-m-d H:i:s", "2024-04-01 00:00:00"),
             DateTime::createFromFormat("Y-m-d H:i:s", "2024-04-01 7:00:00"),
-            $medicine,
-            new MedicineHourRepository($this->pdo)
+            $medicine
         );
 
         $this->assertSame(0, $consumed);
